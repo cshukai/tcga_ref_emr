@@ -1,0 +1,43 @@
+
+# display all the url
+prefix tcga:<http://purl.org/tcga/core#>
+
+select distinct ?url 
+
+where {
+
+  ?file tcga:url ?url .
+}
+
+
+#GBM-AvailableDataTypes
+prefix tcga:<http://purl.org/tcga/core#>
+
+select distinct ?type where {
+  ?file tcga:data-type ?t .
+  ?t rdfs:label ?type .
+  ?file tcga:disease-study ?d .
+  ?d rdfs:label 'gbm' .
+}
+
+# display all the diseases
+
+prefix tcga:<http://purl.org/tcga/core#>
+
+select  distinct $diseaseType
+
+where {
+
+  ?file tcga:disease-study ?diseases .
+  ?diseases rdfs:label $diseaseType.  
+}
+
+
+# display all the url with corresponding data types and disease types
+
+select ?url ?data_type ?disease_type 
+
+where {
+  ?file 
+  ?file tcga:url ?url .
+}
