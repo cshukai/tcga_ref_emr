@@ -10,16 +10,6 @@ where {
 }
 
 
-#GBM-AvailableDataTypes
-prefix tcga:<http://purl.org/tcga/core#>
-
-select distinct ?type where {
-  ?file tcga:data-type ?t .
-  ?t rdfs:label ?type .
-  ?file tcga:disease-study ?d .
-  ?d rdfs:label 'gbm' .
-}
-
 # display all the diseases
 
 prefix tcga:<http://purl.org/tcga/core#>
@@ -32,12 +22,20 @@ where {
   ?diseases rdfs:label $diseaseType.  
 }
 
+# display  names of  image files of gbm patients
+prefix tcga:<http://purl.org/tcga/core#>
 
-# display all the url with corresponding data types and disease types
-
-select ?url ?data_type ?disease_type 
-
-where {
-  ?file 
+select distinct ?dataType ?name where {
+  
   ?file tcga:url ?url .
+  ?file rdfs:label ?name .
+  filter ( contains(?name, '.svs') ) .
+  ?file tcga:data-type ?d.
+  ?d rdfs:label ?dataType.
+  ?file tcga:disease-study ?ds.
+  ?ds  rdfs:label 'gbm'.
 }
+ 
+
+
+ 
