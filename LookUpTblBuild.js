@@ -23,13 +23,14 @@
   
 
 
-
+// get all the diseases from Alleograph
  var allDiseaseTypes={};
  var allDiseases=new Array();
  getAllDiseaseTypes();
  for(var i=0; i<allDiseaseTypes.length; i++){
- 	allDiseases[i]=allDiseaseTypes[i][0].toString();
+ 	allDiseases[i]=allDiseaseTypes[i][0].toString().replace(/\"/g,"");
  	 
  } 
+
 
 
