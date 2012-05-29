@@ -25,7 +25,7 @@ where {
 # display  names of  image files of gbm patients
 prefix tcga:<http://purl.org/tcga/core#>
 
-select distinct ?dataType ?name where {
+select distinct ?dataType ?name ?url where {
   
   ?file tcga:url ?url .
   ?file rdfs:label ?name .
