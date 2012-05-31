@@ -37,7 +37,7 @@ function barcode2elements(barcode,dataType){
 // constructor of disease class
 var  Disease=function(diseaseName){
        this.diseaseName=diseaseName;
-       this.dataTypes=new Array();  
+       this.dataTypes=new Array();
        
     };
     
@@ -104,7 +104,7 @@ Disease.prototype.getPatientsInBcrImages=function(){
    
  
    Disease.prototype.getDataTypeByDisease=function(){
-   	
+   	var that=this;
    	var sparql_template= [ "prefix tcga:<http://purl.org/tcga/core#>",
                         "prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
                         "prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>",
@@ -123,8 +123,8 @@ Disease.prototype.getPatientsInBcrImages=function(){
                            ];
                            
         var sparql_query=sparql_template.join(" ");                       // note :this refers to the windows
-        TCGA.hub.query(sparql_query,function(error,data){console.log(error);dataTypesGivenDisease_temp=data;});
-         window.setTimeout("dataTypesGivenDisease=queryResultObj2Array(dataTypesGivenDisease_temp)",15000); 
+        TCGA.hub.query(sparql_query,function(error,data){console.log(error);that.dataTypesGivenDisease_temp=data;});
+        // window.setTimeout("that.dataTypesGivenDisease=queryResultObj2Array(dataTypesGivenDisease_temp)",15000); 
         
         
         

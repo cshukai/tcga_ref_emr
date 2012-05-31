@@ -89,75 +89,41 @@ function splitTbl2Array(tbl,hasColName){
  
  var allDiseases=new Array();
  getAllDiseaseTypes();
- window.setTimeout("processingDataTypes()",20000);
- 
- //var tempArray=new Array();
+ window.setTimeout("processingDiseaseType()",20000);
  
  
- function fillDataTypes(j,dataTypeArray){
  	
- //	console.log(dataTypesGivenDisease);
- 	// console.log(typeof lookUpTree);
- 	//console.log(allDiseases);
- //	 console.log(j);
- 	// console.log("----");
- 	// console.log( allDiseases[j]);
  	
- 	//console.log( allDiseases[j]['dataType']);	  
- 	//console.log(tempArray);
- 
- 	lookUpTree[allDiseases[j]]['dataType']=dataTypeArray;
- 	//setTempArray(dataTypesGivenDisease,tempArray);
- }
+ 	
  
  
- 
- 
- function processingDataTypes(){
+ function processingDiseaseType(callback){
  	
  	 for(var j=0; j<allDiseaseTypes.length; j++){
  	  allDiseases[j]=allDiseaseTypes[j][0].toString().replace(/\"/g,"");
  	  lookUpTree['disease'].push (allDiseases[j]);	
  	  lookUpTree[allDiseases[j]]={};
  	  lookUpTree[allDiseases[j]]['dataType']=new Array();
+ 	  
+
+
+ 	   	  
  	 }
- 	
- 	
- 	
- 	
- 	
-    for(var j=0; j<allDiseaseTypes.length; j++){
-     
- 	  var aDisease=new Disease(allDiseases[j]);
- 	  var callbacks = $.Callbacks();
-      callbacks.add(aDisease.getDataTypeByDisease);
-      callbacks.add(fillDataTypes);   	  
- 	  callbacks.fire(j,dataTypesGivenDisease);
- 	 
- 	 
- 	  
- 	  
- 	  //lookUpTree[allDiseases[j]]['dataType']=dataTypesGivenDisease;	 
-      //window.setTimeout(function(){fillDataTypes(j)},20000); 
-     //console.log(tempArray);	
- 	
- 	
- 	
- 	 
-    } 
- 	//tempArray=new Array();
+ 	 	 	 	
  }
  
- 
- 
- 
- 
- 
-
- 
 
 
-// var setTempArray=function(data,tempArray){tempArray=data;};
+
+  for(var j=0; j<allDiseaseTypes.length; j++){
+  	  var aDisease=new Disease(allDiseases[j]); 	 
+ 	  aDisease.getDataTypeByDisease();
+ 	  window.setTimeout(function(){aDisease.dataTypes=queryResultObj2Array(aDisease.dataTypesGivenDisease_temp);lookUpTree[allDiseases[j]]['dataType']=aDisease.dataTypes;},20000);
+ 	  	  	
+ 	 }
+
+ 
+ 
  
  
 
