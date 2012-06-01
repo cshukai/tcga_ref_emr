@@ -83,14 +83,17 @@ function splitTbl2Array(tbl,hasColName){
 
 
 // processing
+var dfd = $.Deferred();
  var lookUpTree={};
  lookUpTree['disease']=new Array();
  
  
  var allDiseases=new Array();
+ var aDisease={};
  getAllDiseaseTypes();
- window.setTimeout("processingDiseaseType()",20000);
+// window.setTimeout(function(){processingDiseaseType(processDataTypes(allDiseases,lookUpTree));},20000);
  
+window.setTimeout(function(){processingDiseaseType();},20000);
  
  	
  	
@@ -114,15 +117,72 @@ function splitTbl2Array(tbl,hasColName){
  
 
 
+    // function requestDataTypeGivenDisease(idx,aDisease,lookUpTree,callback){
+//    	   	 
+ 	  // aDisease.getDataTypeByDisease();
+//  	  
+   // } 
 
-  for(var j=0; j<allDiseaseTypes.length; j++){
-  	  var aDisease=new Disease(allDiseases[j]); 	 
- 	  aDisease.getDataTypeByDisease();
- 	  window.setTimeout(function(){aDisease.dataTypes=queryResultObj2Array(aDisease.dataTypesGivenDisease_temp);lookUpTree[allDiseases[j]]['dataType']=aDisease.dataTypes;},20000);
- 	  	  	
+  // var requestDataType= function requestDataTypeGivenDisease(idx,aDisease,lookUpTree){
+   	  // console.log('here'); 	 
+ 	  // aDisease.getDataTypeByDisease();
+//  	  
+   // }; 
+
+
+
+
+// function requestDataTypeGivenDisease(k,aDisease,lookUpTree){
+   	  // console.log('here'); 	 
+ 	  // aDisease.getDataTypeByDisease();
+//  	  
+   // }; 
+// 
+// 
+// var setDataTypes=function setDataTypeGivenDisease(k,aDisease,lookUpTree){
+  	 // // console.log(aDisease.diseaseName);
+  	  // aDisease.dataTypes=queryResultObj2Array(aDisease.dataTypesGivenDisease_temp);
+  	  // lookUpTree[allDiseases[k]]['dataType']=aDisease.dataTypes;
+// };
+//  
+
+
+
+
+  // function setDataTypeGivenDisease(pre_run_function,idx,dataTypesGivenDisease_temp,lookUpTree){
+  	 // // console.log(aDisease.diseaseName);
+  	  // aDisease.dataTypes=queryResultObj2Array(dataTypesGivenDisease_temp);
+  	  // lookUpTree[allDiseases[k]]['dataType']=aDisease.dataTypes;
+  // }
+  
+  
+  
+    function pauseLoop(){
+    	 window.setTimeout(function(){console.log('wait');},20000);
+    }
+  
+    // function resumeLoop(){
+    	// continue;
+    // }
+
+
+  	
+  	 for(var k=0; k<allDiseases.length; k++){
+  
+  	   if(k==25){
+  	   	  break;
+  	   }
+  	   var aDisease=new Disease(allDiseases[k]);
+  	   dfd.done(aDisease.getDataTypeByDisease(lookUpTree), pauseLoop());
+ 	  //requestDataTypeGivenDisease(k,aDisease,lookUpTree,setDataTypeGivenDisease(k,aDisease,lookUpTree));
+ 	  	  	  	//setDataTypeGivenDisease(requestDataType,k,aDisease.dataTypesGivenDisease_temp,lookUpTree);
+ 	   //requestDataTypeGivenDisease(k,aDisease,lookUpTree);
+ 	  	  	  	
+ 	  	  	  	
+ 	  	  	  	console.log(k);
  	 }
-
- 
+  	
+  
  
  
  

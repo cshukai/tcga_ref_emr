@@ -43,7 +43,7 @@ var  Disease=function(diseaseName){
     
     
 Disease.prototype.getPatientsInBcrImages=function(){
-	      
+	      var that=this;
           var sparql_template= [ "prefix tcga:<http://purl.org/tcga/core#>",
                                  "prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
                                  "prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>",
@@ -65,8 +65,8 @@ Disease.prototype.getPatientsInBcrImages=function(){
                            ];
                            
         var sparql_query=sparql_template.join(" ");
-                                                                              // note :this refers to the windows        
-        TCGA.hub.query(sparql_query,function(error,data){console.log(error); this.patientsOfImageData=data;});
+                                                                              
+        TCGA.hub.query(sparql_query,function(error,data){console.log(error); that.patientsOfImageData=data;});
         
         //result is an array where every element is a type of biomedical data
       
@@ -74,6 +74,7 @@ Disease.prototype.getPatientsInBcrImages=function(){
     
     
   Disease.prototype.getUrlsOfClinicalDataSets=function(){
+  	  var that=this;
   	  var sparql_template= [ "prefix tcga:<http://purl.org/tcga/core#>",
                                  "prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
                                  "prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>",
@@ -94,8 +95,8 @@ Disease.prototype.getPatientsInBcrImages=function(){
                            ];
                            
         var sparql_query=sparql_template.join(" ");
-                                                                              // note :this refers to the windows        
-        TCGA.hub.query(sparql_query,function(error,data){console.log(error); this.urlsOfClinicalDataSets=data;});
+                                                                                
+        TCGA.hub.query(sparql_query,function(error,data){console.log(error);that.urlsOfClinicalDataSets=data;});
         
         //result is an array where every element is a type of biomedical data
   };
@@ -103,7 +104,7 @@ Disease.prototype.getPatientsInBcrImages=function(){
   
    
  
-   Disease.prototype.getDataTypeByDisease=function(){
+   Disease.prototype.getDataTypeByDisease=function(lookUpTree){
    	var that=this;
    	var sparql_template= [ "prefix tcga:<http://purl.org/tcga/core#>",
                         "prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
@@ -123,18 +124,11 @@ Disease.prototype.getPatientsInBcrImages=function(){
                            ];
                            
         var sparql_query=sparql_template.join(" ");                       // note :this refers to the windows
-        TCGA.hub.query(sparql_query,function(error,data){console.log(error);that.dataTypesGivenDisease_temp=data;});
-        // window.setTimeout("that.dataTypesGivenDisease=queryResultObj2Array(dataTypesGivenDisease_temp)",15000); 
-        
+        TCGA.hub.query(sparql_query,function(error,data){console.log(error);that.dataTypes= queryResultObj2Array(data);lookUpTree[that.diseaseName]['dataType']=that.dataTypes;});
+   
         
         
                  
          
        }
   
- 
-  
-   //Disease.prototype.getUrlOfClinicalDataSets=
-  
-    
-
