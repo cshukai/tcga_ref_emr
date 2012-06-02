@@ -201,8 +201,11 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
        }
   
   
-  
-
+  //assuming colnames are tab-separated
+  Disease.prototype.fetchRowColNames=function(url,ColIndexForRowName){
+  	   var that=this;
+  	   TCGA.get(url, function(error,data){console.log(error);that.cuurentTbl=splitTbl2Array(data,false);that.currentColNames=that.cuurentTbl[0];that.tcga_barcodes=new Array();for(var i=1; i<that.cuurentTbl.length; i++){that.tcga_barcodes[i-1]=that.cuurentTbl[i][ColIndexForRowName]}});
+  }
 
   
   
