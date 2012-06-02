@@ -164,7 +164,7 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
                            
         var sparql_query=sparql_template.join(" ");
                                                                                 
-        TCGA.hub.query(sparql_query,function(error,data){console.log(error);that.urlsOfClinicalDataSets=data;});
+        TCGA.hub.query(sparql_query,function(error,data){console.log(error);that.urlsOfClinicalDataSets=queryResultObj2Array(data,0);});
         
         //result is an array where every element is a type of biomedical data
   };
