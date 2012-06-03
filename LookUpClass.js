@@ -1,5 +1,37 @@
 
+ var lookUpTree={};
+ lookUpTree['disease']=new Array();
+ 
+ 
+ var allDiseases=new Array();
+ var aDisease={};
+ getAllDiseaseTypes();
   	
+window.setTimeout(function(){processingDiseaseType();},20000);
+ 
+ 	
+ 	
+ 	
+ 
+ 
+ function processingDiseaseType(callback){
+ 	
+ 	 for(var j=0; j<allDiseaseTypes.length; j++){
+ 	  allDiseases[j]=allDiseaseTypes[j][0].toString().replace(/\"/g,"");
+ 	  lookUpTree['disease'].push (allDiseases[j]);	
+ 	  lookUpTree[allDiseases[j]]={};
+ 	  lookUpTree[allDiseases[j]]['dataType']=new Array();
+ 	  
+
+
+ 	   	  
+ 	 }
+ 	 	 	 	
+ }
+ 
+//  time interval here
+
+
   	 for(var k=0; k<allDiseases.length; k++){
   
   	   if(k==25){
@@ -35,6 +67,7 @@
     		      if(lookUpTree[allDiseases[i]]['dataType'][j].match(/clin/)){
     		    	lookUpTree[allDiseases[i]]['clin']={};
     		    	lookUpTree[allDiseases[i]]['clin']['url']=new Array();
+    		    	lookUpTree[allDiseases[i]]['clin']['url']['subDataType']=new Array();
     		    	
     		    }	
     		    

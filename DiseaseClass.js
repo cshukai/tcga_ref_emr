@@ -170,7 +170,17 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
   };
   
   
-   
+   Disease.prototype.setClinSubDataTypeinTreeByDisease=function(urls,lookUpTree){
+   	  var that=this;
+   	  that.clinDataType=new Array();
+      for(var i =0; i<that.urlsOfClinicalDataSets.length;i++){
+     
+  	   that.fetchColNames(that.urlsOfClinicalDataSets[i]);
+  	 
+  	   lookUpTree[allDiseases[i]]['clin']['url']=that.urlsOfClinicalDataSets;
+  	   lookUpTree[allDiseases[i]]['clin']['url']['subDataType'][i]=that.currentColNames;
+      }
+   }
  
    Disease.prototype.getDataTypeByDisease=function(lookUpTree){
    	var that=this;
@@ -199,6 +209,18 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
                  
          
        }
+  
+  
+  
+
+
+
+//assuming colnames are tab-separated
+  Disease.prototype.fetchColNames=function(url){
+  	   var that=this;
+  	   TCGA.get(url, function(error,data){console.log(error);that.cuurentTbl=splitTbl2Array(data,false);that.currentColNames=that.cuurentTbl[0];});
+  }
+
   
   
   //assuming colnames are tab-separated
@@ -234,38 +256,3 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
       
   }
   
-
-
-
- var lookUpTree={};
- lookUpTree['disease']=new Array();
- 
- 
- var allDiseases=new Array();
- var aDisease={};
- getAllDiseaseTypes();
-// window.setTimeout(function(){processingDiseaseType(processDataTypes(allDiseases,lookUpTree));},20000);
- 
-window.setTimeout(function(){processingDiseaseType();},20000);
- 
- 	
- 	
- 	
- 
- 
- function processingDiseaseType(callback){
- 	
- 	 for(var j=0; j<allDiseaseTypes.length; j++){
- 	  allDiseases[j]=allDiseaseTypes[j][0].toString().replace(/\"/g,"");
- 	  lookUpTree['disease'].push (allDiseases[j]);	
- 	  lookUpTree[allDiseases[j]]={};
- 	  lookUpTree[allDiseases[j]]['dataType']=new Array();
- 	  
-
-
- 	   	  
- 	 }
- 	 	 	 	
- }
- 
-
