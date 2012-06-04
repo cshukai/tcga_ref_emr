@@ -46,17 +46,30 @@ window.setTimeout(function(){processingDiseaseType();},20000);
  	  	  	  	console.log(k);
  	 }
   	
+//  time interval here
+
     
-    function fillClinFields(lookUpTree,aDisease){
+    function fillClinFields(aDisease){
     	
     }
     
     
     function fillFieldsGivenDataType(allDiseases,lookUpTree){
     	for(var i=0; i<allDiseases.length ; i++){
+    		
+    		if(i==allDiseases.length){
+    			break;
+    		}
+    		
     		var numOfDataTypes=lookUpTree[allDiseases[i]]['dataType'].length;
     		
     		for(var j=0;j<numOfDataTypes ;j++){
+    			
+    			
+    			if(j==numOfDataTypes){
+    				 break;
+    			}
+    			
     		    if(lookUpTree[allDiseases[i]]['dataType'][j].match(/slide_images/)){
     		    	lookUpTree[allDiseases[i]]['slide_images']={};  		    	
     		    	lookUpTree[allDiseases[i]]['slide_images']['url']=new Array();
@@ -69,7 +82,7 @@ window.setTimeout(function(){processingDiseaseType();},20000);
     		    	lookUpTree[allDiseases[i]]['clin']['url']=new Array();
     		    	lookUpTree[allDiseases[i]]['clin']['url']['subDataType']=new Array();
     		    	var aDisease=new Disease(allDiseases[i]);
-    		    	aDisease.setClinSubDataTypeinTreeByDisease(aDisease,lookUpTree);
+    		    	aDisease.setClinUrlinTreeByDisease(lookUpTree,i,allDiseases);
     		    }	
     		    
     		    	

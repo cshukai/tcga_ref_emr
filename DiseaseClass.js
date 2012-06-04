@@ -170,27 +170,53 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
   };
   
   
-   Disease.prototype.setClinSubDataTypeinTreeByDisease=function(aDisease,lookUpTree){
-   	  aDisease.getUrlsOfClinicalDataSets();
+   Disease.prototype.setClinUrlinTreeByDisease=function(lookUpTree,i,allDiseases){
+   	  var that=this;
+  	  var sparql_template= [ "prefix tcga:<http://purl.org/tcga/core#>",
+                                 "prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+                                 "prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>",
+                                 "prefix owl:<http://www.w3.org/2002//07/owl#>",                       
+                                 "prefix dc:<http://purl.org/dc/ele07/owl#>",
+                                 "prefix dc:<http://purl.org/dc/elements/1.1/>",
+                                 "prefix dcterms:<http://purl.org/dc/terms/>",
+                                 "prefix foaf:<http://xmlns.com/foaf/0.1/>",
+                                 "prefix fti:<http://franz.com/ns/allegrograph/2.2/textindex/>",
+                                 "prefix skos:<http://www.w3.org/2004/02/skos/core#>",
+                           "select distinct ?url where { ",
+                           "?file tcga:url ?url .",                         
+                           "filter ( contains(?url, "+"\'"+this.diseaseName+"\'"+") ) .",
+                           "filter ( contains(?url, "+"\'"+"clin"+"\'"+") ) .",
+                           "filter ( contains(?url, "+"\'"+".txt"+"\'"+") ) .",
+                           "filter ( contains(?url, "+"\'"+"public"+"\'"+") ) .",        
+                           "}"
+                           ];
+                           
+        var sparql_query=sparql_template.join(" ");
+                                                                                
+        TCGA.hub.query(sparql_query,function(error,data){
+                                                           console.log(error);
+                                                           that.urlsOfClinicalDataSets=queryResultObj2Array(data,0);
+                                                           lookUpTree[allDiseases[i]]['clin']['url']=that.urlsOfClinicalDataSets;
+                                                           //console.log(typeof that.urlsOfClinicalDataSets);
+                                                          
+                                                           
+                                                           // for(var i =0; i< that.urlsOfClinicalDataSets.length;i++){
+   	  		                                                    // console.log(i);
+   	  		                                                    // console.log()
+   	                  	                                        // if(i== that.urlsOfClinicalDataSets.length){
+   	  	                                                        	 // break;
+   	                                                       	     // }	
+//  	   
+  	                                                        // lookUpTree[allDiseases[i]]['clin']['url']=that.urlsOfClinicalDataSets;
+//   	     
+  	                                                      // //lookUpTree[allDiseases[i]]['clin']['url']['subDataType'].push( aDisease.currentColNames); 	     
+                                                            // }
+                                                          
+                                                          
+                                                          });
+        
    	  
-   	  window.setTimeout(function(){      
-   	  	for(var i =0; i< aDisease.urlsOfClinicalDataSets.length;i++){
-   	  		//line 177 Uncaught TypeError: Cannot read property 'length' of undefined
-   	  	  if(i== aDisease.urlsOfClinicalDataSets.length){
-   	  	  	 break;
-   	  	  }	
-   	  		
-          console.log('here_1');
-      
-  	      aDisease.fetchColNames( aDisease.urlsOfClinicalDataSets[i]);
-  	      console.log('here_2');
-  	   
-  	      lookUpTree[allDiseases[i]]['clin']['url']= aDisease.urlsOfClinicalDataSets;
-  	      console.log('here_3');
-  	      lookUpTree[allDiseases[i]]['clin']['url']['subDataType'].push( aDisease.currentColNames);
-  	      console.log('here_4');
-      };},20000);
-   	 
+   	  
    	 
 
    }
@@ -239,7 +265,7 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
   //assuming colnames are tab-separated
   Disease.prototype.fetchRowColNames=function(url,ColIndexForRowName){
   	   var that=this;
-  	   TCGA.get(url, function(error,data){console.log(error);that.cuurentTbl=splitTbl2Array(data,false);that.currentColNames=that.cuurentTbl[0];that.tcga_barcodes=new Array();for(var i=1; i<that.cuurentTbl.length; i++){that.tcga_barcodes[i-1]=that.cuurentTbl[i][ColIndexForRowName]}});
+  	   TCGA.get(url, function(error,data){console.log(error);that.cuurentTbl=splitTbl2Array(data,false);that.currentColNames=that.cuurentTbl[0];that.tcga_barcodes=new Array();for(var i=1; i<that.cuurentTbl.length; i++){that.tcga_barcodes[i-1]=that.cuurentTbl[i][ColIndexForRowName];}});
   }
 
   
