@@ -68,7 +68,8 @@ window.setTimeout(function(){processingDiseaseType();},20000);
     		    	lookUpTree[allDiseases[i]]['clin']={};
     		    	lookUpTree[allDiseases[i]]['clin']['url']=new Array();
     		    	lookUpTree[allDiseases[i]]['clin']['url']['subDataType']=new Array();
-    		    	
+    		    	var aDisease=new Disease(allDiseases[i]);
+    		    	aDisease.setClinSubDataTypeinTreeByDisease(aDisease,lookUpTree);
     		    }	
     		    
     		    	

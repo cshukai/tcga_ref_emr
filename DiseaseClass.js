@@ -106,7 +106,7 @@ function barcode2elements(barcode,dataType){
 var  Disease=function(diseaseName){
        this.diseaseName=diseaseName;
        this.dataTypes=new Array();
-       
+      
     };
     
     
@@ -170,16 +170,29 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
   };
   
   
-   Disease.prototype.setClinSubDataTypeinTreeByDisease=function(urls,lookUpTree){
-   	  var that=this;
-   	  that.clinDataType=new Array();
-      for(var i =0; i<that.urlsOfClinicalDataSets.length;i++){
-     
-  	   that.fetchColNames(that.urlsOfClinicalDataSets[i]);
-  	 
-  	   lookUpTree[allDiseases[i]]['clin']['url']=that.urlsOfClinicalDataSets;
-  	   lookUpTree[allDiseases[i]]['clin']['url']['subDataType'][i]=that.currentColNames;
-      }
+   Disease.prototype.setClinSubDataTypeinTreeByDisease=function(aDisease,lookUpTree){
+   	  aDisease.getUrlsOfClinicalDataSets();
+   	  
+   	  window.setTimeout(function(){      
+   	  	for(var i =0; i< aDisease.urlsOfClinicalDataSets.length;i++){
+   	  		//line 177 Uncaught TypeError: Cannot read property 'length' of undefined
+   	  	  if(i== aDisease.urlsOfClinicalDataSets.length){
+   	  	  	 break;
+   	  	  }	
+   	  		
+          console.log('here_1');
+      
+  	      aDisease.fetchColNames( aDisease.urlsOfClinicalDataSets[i]);
+  	      console.log('here_2');
+  	   
+  	      lookUpTree[allDiseases[i]]['clin']['url']= aDisease.urlsOfClinicalDataSets;
+  	      console.log('here_3');
+  	      lookUpTree[allDiseases[i]]['clin']['url']['subDataType'].push( aDisease.currentColNames);
+  	      console.log('here_4');
+      };},20000);
+   	 
+   	 
+
    }
  
    Disease.prototype.getDataTypeByDisease=function(lookUpTree){
@@ -251,7 +264,7 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
                            "}"
                            ];
                            
-        var sparql_query=sparql_template.join(" ");                       // note :this refers to the windows
+        var sparql_query=sparql_template.join(" ");                      
         TCGA.hub.query(sparql_query,function(error,data){console.log(error);allDiseaseTypes=data;});
       
   }
