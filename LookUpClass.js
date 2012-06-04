@@ -118,7 +118,7 @@ window.setTimeout(function(){processingDiseaseType();},20000);
     		    
     		    
     		      if(lookUpTree[allDiseases[i]]['dataType'][j].match(/clin/)){
-    		      	console.log(i);   		    	
+    		      //	console.log(i);   		    	
     		    	//lookUpTree[allDiseases[i]]['clin']['subDataType']=new Array();
     		    	var aDisease=new Disease(allDiseases[i]);
     		    	

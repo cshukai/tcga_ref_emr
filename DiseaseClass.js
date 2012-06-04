@@ -209,18 +209,24 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
  
    Disease.prototype.setSubDataTypesInTreeByDisease=function(lookUpTree,i,allDiseases,mainDataType){
    	                                                 
-   	                                                      var that= this;
-   	                                                        console.log(i);
-   	                                                        console.log('-----');      
+   	                                                       var that= this;
+   	                                                       lookUpTree[allDiseases[i]][mainDataType]['url_colNames_map']=new Array();
+   	                                                          
                                                            for(var j =0; j< lookUpTree[allDiseases[i]][mainDataType]['url'].length;j++){
-   	  		                                                    console.log(j);
-   	  		                                                  
+   	  		                                                     
+   	  		                                                     
    	                  	                                        if(j==lookUpTree[allDiseases[i]][mainDataType]['url'].length){
    	  	                                                        	 break;
    	                                                       	     }	
- 	                                                       
- 	                                                          lookUpTree[allDiseases[i]][mainDataType]['url'][j]['subDataType']=new Array();
-  	                                                          TCGA.get(lookUpTree[allDiseases[i]][mainDataType]['url'][j], function(error,data){console.log(error);that.cuurentTbl=splitTbl2Array(data,false);that.currentColNames=that.cuurentTbl[0];lookUpTree[allDiseases[i]][mainDataType]['url'][j]['subDataType']=that.currentColNames;}); 	     
+ 	                                                          
+ 	                                                           // console.log(i); 
+ 	                                                          // console.log(j);
+ 	                                                           // console.log('----');
+ 	                                                           
+ 	                                                            lookUpTree[allDiseases[i]][mainDataType]['url_colNames_map'].push( lookUpTree[allDiseases[i]][mainDataType]['url'][j]);
+ 	                                                            
+ 	                                                         // lookUpTree[allDiseases[i]][mainDataType]['url'][j]['subDataType']=new Array();
+  	                                                          TCGA.get(lookUpTree[allDiseases[i]][mainDataType]['url'][j], function(error,data){console.log(error);that.cuurentTbl=splitTbl2Array(data,false);that.currentColNames=that.cuurentTbl[0];lookUpTree[allDiseases[i]][mainDataType]['url_colNames_map'].push(that.currentColNames);}); 	     
   	     
   	                                                          
                                                             }
