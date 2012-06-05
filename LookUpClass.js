@@ -158,7 +158,23 @@ function fillBarcodeGivenDataType(allDiseases,lookUpTree){
     		    if(lookUpTree[allDiseases[i]]['dataType'][j].match(/clin/)){
     		      
     		    	var aDisease=new Disease(allDiseases[i]);
-    		    	lookUpTree[allDiseases[i]]['clin']['url_colNames_map'] ;//to be continued 		    	
+    		    	var totLen=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'].length;
+    		    	var start=totLen/2;
+    		    	for(var k=start;k<totLen;k++){
+    		    		
+    		    		if(k==totLen){
+    		    			break;
+    		    		}
+    		    		
+    		    		
+    		    		var subDataTypes=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][k];
+    		    		if(subDataTypes.indexOf("bcr_sample_barcode")> -1){
+    		    			
+    		    			var urlIndex=k-totLen/2;
+    		    			var currentURL=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][urlIndex];
+    		    		    aDisease.fetchOneColInFile(lookUpTree,i,j,k,allDiseases,'clin',currentURL,'bcr_sample_barcode','url_barcode_map');
+    		    		}
+    		    	}
     		    	
     		    }	
     			
@@ -170,3 +186,4 @@ function fillBarcodeGivenDataType(allDiseases,lookUpTree){
 
 
 
+ fillBarcodeGivenDataType(allDiseases,lookUpTree)(allDiseases,lookUpTree);
