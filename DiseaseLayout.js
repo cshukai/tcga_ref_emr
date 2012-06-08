@@ -1,4 +1,32 @@
 /*
+ *  loading JQuery Dependicies
+ * 
+ */
+
+
+var ScriptNode=document.createElement('script');
+ScriptNode.setAttribute('type','text/javascript');
+ScriptNode.setAttribute('src','http://dl.dropbox.com/u/79021836/jQueryUI/jquery-ui-1.8.21.custom/js/jquery-1.7.2.min.js');
+document.head.appendChild(ScriptNode);
+
+var ScriptNode=document.createElement('script');
+ScriptNode.setAttribute('type','text/javascript');
+ScriptNode.setAttribute('src','http://dl.dropbox.com/u/79021836/jQueryUI/jquery-ui-1.8.21.custom/js/jquery-ui-1.8.21.custom.min.js');
+document.head.appendChild(ScriptNode);
+
+
+var css = document.createElement('link');
+css.setAttribute('rel', 'stylesheet');
+css.setAttribute('href', 'http://dl.dropbox.com/u/79021836/jQueryUI/jquery-ui-1.8.21.custom/css/start/jquery-ui-1.8.21.custom.css');
+document.head.appendChild(css);
+  
+
+
+
+
+
+
+/*
  * from DiseaseClass.js
  */
 
@@ -502,9 +530,19 @@ for (var rowIdx=0; rowIdx<numofFunctions ; rowIdx++){
    	 button_2.setAttribute('type','button');
    	 button_3.setAttribute('type','button');
    	  
+   	  
+   	 button_1.setAttribute('class','show_dialog');
+     button_2.setAttribute('class','show_dialog');
+   	 button_3.setAttribute('class','show_dialog');
+   	  
    	 button_1.setAttribute('value',currentFunctions[rowIdx]);
    	 button_2.setAttribute('value',currentFunctions[rowIdx+1]);
    	 button_3.setAttribute('value',currentFunctions[rowIdx+2]);
+   	 
+   	 
+   	 
+   	 
+   	 
    	 
    	 cell_1.appendChild(button_1);
    	 cell_2.appendChild(button_2);
@@ -518,4 +556,14 @@ buttonTable.cellPadding="25";
 buttonTable.cellSpacing="15";
 //buttonTable.style.textAlign="center";
 customCtrlDiv.appendChild(buttonTable);
+
+
+
+
+var dialogDiv=document.createElement('div');
+dialogDiv.setAttribute('id','dialog');
+var result=document
+
+
+
 

@@ -297,11 +297,9 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
          
        }
   
-  /*
-   * 1. scan thru  sub data type and look for keyword like barcode
-   * 2. fetch barcode 
-   * 3. put barcode in  lookUpTree['blca']['clin']['url_barcode_map']
-   */
+
+
+
   
   
   Disease.prototype.fetchOneColInFile=function(lookUpTree,i,j,k,allDiseases,mainDataType,currentURL,resultColname,urlResultMapName){
@@ -322,6 +320,7 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
   	   	that.currentColNames=that.cuurentTbl[0];
   	    
   	   	for(var idx=1; idx<that.cuurentTbl.length; idx++){
+  	   	
   	   		if(idx==that.cuurentTbl.length){
   	   			break;
   	   		}
