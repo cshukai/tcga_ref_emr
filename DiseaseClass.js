@@ -288,8 +288,12 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
                            "?d rdfs:label "+"\'"+this.diseaseName+"\'"+"."+"}"
                            ];
                            
-        var sparql_query=sparql_template.join(" ");                       // note :this refers to the windows
-        TCGA.hub.query(sparql_query,function(error,data){console.log(error);that.dataTypes= queryResultObj2Array(data,0);lookUpTree[that.diseaseName]['dataType']=that.dataTypes;});
+        var sparql_query=sparql_template.join(" ");                       
+        TCGA.hub.query(sparql_query,function(error,data){
+        	                                              console.log(error);
+        	                                              //that.dataTypes= queryResultObj2Array(data.results.bindings.map(function (obj) { return obj.type.value; }),0);
+        	                                              that.dataTypes=data.results.bindings.map(function (obj) { return obj.type.value; });
+        	                                              lookUpTree[that.diseaseName]['dataType']=that.dataTypes;});
    
         
         
@@ -376,7 +380,10 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
                            ];
                            
         var sparql_query=sparql_template.join(" ");                      
-        TCGA.hub.query(sparql_query,function(error,data){console.log(error);allDiseaseTypes=data;});
+        TCGA.hub.query(sparql_query,function(error,data){
+        	console.log(error);
+        	allDiseaseTypes=data.results.bindings.map(function (obj) { return obj.diseaseType.value; });
+        });
       
   }
   

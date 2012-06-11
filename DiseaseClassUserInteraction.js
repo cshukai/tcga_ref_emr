@@ -1,13 +1,38 @@
-$(function() {
-		$( "#dialog" ).dialog({
-			autoOpen: false,
-			show: "blind",
-			hide: "explode",
-			modal:"true"
-		});
 
-		$( ".show_dialog'" ).click(function() {
-			$( "#dialog" ).dialog( "open" );
-			return false;
-		});
-	});
+
+
+
+
+var data={};
+
+$(document).ready(function(){
+   
+   var aDisease=aDisease=new Disease('blca');
+   
+   
+       $("select").change(function () {
+           
+             aDisease=new Disease($("select option:selected").value);
+            
+        })
+        .trigger('change');
+   
+   
+   $('.flat').click(
+   	
+   	             if(){
+   	             	
+   	             }
+   	                function() {
+				         
+		            }
+		       );
+   	   
+
+});
+
+
+// var resultStore = Ext.create('Ext.data.Store', {
+    // model: 'ResultView',
+    // data: temp
+// });
