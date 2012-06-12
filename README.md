@@ -8,4 +8,11 @@ Click on tab "Modules" on top.
 
 Copy the following link into "Load module by URL" box and click on "Load module"
 
+1. To visualize in data cube browser :
+
+https://dl.dropbox.com/u/79021836/TCGA_Ref_EMR/DataCubeViewer.js
+
+
+2. To see how current methods of Class Disease:
+
 http://dl.dropbox.com/u/79021836/TCGA_Ref_EMR/DiseaseLayout.js
