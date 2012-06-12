@@ -4,11 +4,27 @@ ScriptNode.setAttribute('type','text/javascript');
 ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/ext-4.1.0-gpl/extjs-4.1.0/ext-all-debug.js');
 document.head.appendChild(ScriptNode);
 
+var ScriptNode=document.createElement('script');
+ScriptNode.setAttribute('type','text/javascript');
+ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/ext-4.1.0-gpl/extjs-boxselect-2.0/src/BoxSelect.js');
+document.head.appendChild(ScriptNode);
+
+
 
 var css = document.createElement('link');
 css.setAttribute('rel', 'stylesheet');
 css.setAttribute('href', 'https://dl.dropbox.com/u/79021836/ext-4.1.0-gpl/extjs-4.1.0/resources/css/ext-all-debug.css');
 document.head.appendChild(css);
+
+
+var css = document.createElement('link');
+css.setAttribute('rel', 'stylesheet');
+css.setAttribute('href', 'https://dl.dropbox.com/u/79021836/ext-4.1.0-gpl/extjs-boxselect-2.0/src/BoxSelect.css');
+document.head.appendChild(css);
+
+
+
+
 
 
 window.setTimeout(function(){startProcess();},5000);
@@ -80,7 +96,24 @@ function startProcess(){
     });
     
     
-    
+   var disease_dataType_store= Ext.create('Ext.data.Store', {
+    fields: ['disease', 'dataType'],
+    data : [
+        {"disease":"BLCA", "dataType":"snp"},
+        {"disease":"GBM", "dataType":"transcriptome"},
+        {"disease":"OV", "dataType":"methylation"}
+      
+    ]
+}); 
+
+   var dataTypeBox= new Ext.form.ComboBox({
+   	   id:'dataType',
+   	   emptyText: 'Select Data Type...',
+   	   multiSelect:true,
+   	   store:disease_dataType_store
+   	
+   });
+   
    var dataType_menu= new Ext.menu.Menu({
         id: 'dataType',
         style: {
