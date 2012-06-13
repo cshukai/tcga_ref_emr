@@ -7,7 +7,7 @@ var data={};
 
 $(document).ready(function(){
    
-   var aDisease=aDisease=new Disease('blca');
+   var aDisease=new Disease('blca');
    
    
        $("select").change(function () {
@@ -20,12 +20,12 @@ $(document).ready(function(){
    
    $('.flat').click(
    	
-   	             if(){
-   	             	
-   	             }
-   	                function() {
-				         
-		            }
+   	             // if(){
+//    	             	
+   	             // }
+   	                // function() {
+// 				         
+		            // }
 		       );
    	   
 

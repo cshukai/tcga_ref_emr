@@ -1,29 +1,17 @@
 
-
-var css = document.createElement('link');
-css.setAttribute('rel', 'stylesheet');
-css.setAttribute('href', 'http://dl.dropbox.com/u/79021836/jQueryUI/jquery-ui-1.8.21.custom/css/start/jquery-ui-1.8.21.custom.css');
-document.head.appendChild(css);
-
-var css = document.createElement('link');
-css.setAttribute('rel', 'stylesheet');
-css.setAttribute('href', 'https://dl.dropbox.com/u/79021836/ExtJs/css/ext-standard-debug.css');
-document.head.appendChild(css);
-
-
-
+//loading dependencies
 
 
 
 var ScriptNode=document.createElement('script');
 ScriptNode.setAttribute('type','text/javascript');
-ScriptNode.setAttribute('src','http://dl.dropbox.com/u/79021836/jQueryUI/jquery-ui-1.8.21.custom/js/jquery-ui-1.8.21.custom.min.js');
+ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/ext-4.1.0-gpl/extjs-4.1.0/ext-all.js');
 document.head.appendChild(ScriptNode);
 
 
 var ScriptNode=document.createElement('script');
 ScriptNode.setAttribute('type','text/javascript');
-ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/TCGA_Ref_EMR/DiseaseClassUserInteraction.js');
+ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/TCGA_Ref_EMR/DiseaseClass.js');
 document.head.appendChild(ScriptNode);
 
 
@@ -31,392 +19,25 @@ document.head.appendChild(ScriptNode);
 
 
 
-/*
- * from DiseaseClass.js
- */
-
-
-
-function  queryResultObj2Array(qr,targetIdx){
-	//assuming query results ares at the targetIdx of every  array element in object
-	var output=new Array();
-	for(var i=0; i<qr.length;i++){
-		output[i]=qr[i][targetIdx].toString().replace(/\"/g,"");
-	}
-	return(output);
-}
+// var ScriptNode=document.createElement('script');
+// ScriptNode.setAttribute('type','text/javascript');
+// ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/TCGA_Ref_EMR/DiseaseClassUserInteraction.js');
+// document.head.appendChild(ScriptNode);
 
 
 
 
-
-
-function splitTbl2Array(tbl,hasColName){
-   allText=tbl.split("\n");
-   var colNum=(allText[0].split("\t")).length;
-   var rawRowNum=allText.length;
-   
-   var rowNum;
-   var startRow;
-   var i;  
-   
-   if(hasColName){
-   	   rowNum=rawRowNum-1;
-   	   startRow=1;
-   }
-   
-   else{
-   	   rowNum=rawRowNum;
-   	   startRow=0;
-   }  
-   
-   
-   var tabularData=new Array(rowNum);
-   for(i=startRow;i<allText.length;i++){
-   	    var tblRowIdx;
-   	    if(hasColName){
-   	    	tblRowIdx=i-1;
-   	    }
-   	    else{
-   	    	tblRowIdx=i;
-   	    }
-   	    
-   	    tabularData[tblRowIdx]=new Array(colNum);   	 
-   	    var thisLine=allText[i].split("\t");
-   	    for(j=0;j<colNum;j++){
-   	    	tabularData[tblRowIdx][j]=thisLine[j];
-   	    	//console.log(tabularData[i,j]);
-   	    }
-   	     
-   }
-   return(tabularData);    	
-}
+var css = document.createElement('link');
+css.setAttribute('rel', 'stylesheet');
+css.setAttribute('href', 'https://dl.dropbox.com/u/79021836/ext-4.1.0-gpl/extjs-4.1.0/resources/css/ext-all-debug.css');
+document.head.appendChild(css);
 
 
 
 
 
 
-
-
-
-//Management of TCGA barcode
-
-
-
-
-
-function barcode2elements(barcode,dataType){
-	     var barcodeElement={};
-         
-         var tempArray=barcode.split('-');
-         tempArray.shift();
-         
-         if(dataType==="slide_images"){
-         	tempArray.pop();
-         	//console.log(tempArray.length);
-         	barcodeElement={
-         		tissue_source_site:tempArray[0],
-         		participant:tempArray[1],
-         		sampleType:tempArray[2].match(/\d+/),
-         		vial:tempArray[2].match(/[A-Z]/),
-         		portion:tempArray[3].match(/\d+/),
-         		analyte:tempArray[3].match(/[A-Z]/)
-         		
-         	};
-         }
-         
-         
-         return  barcodeElement;
-    }
-
-
-
-
-
-
-// constructor of disease class
-var  Disease=function(diseaseName){
-       this.diseaseName=diseaseName;
-       this.dataTypes=new Array();
-      
-    };
-    
-    
-Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
-	      var that=this;
-          var sparql_template= [ "prefix tcga:<http://purl.org/tcga/core#>",
-                                 "prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
-                                 "prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>",
-                                 "prefix owl:<http://www.w3.org/2002//07/owl#>",                       
-                                 "prefix dc:<http://purl.org/dc/ele07/owl#>",
-                                 "prefix dc:<http://purl.org/dc/elements/1.1/>",
-                                 "prefix dcterms:<http://purl.org/dc/terms/>",
-                                 "prefix foaf:<http://xmlns.com/foaf/0.1/>",
-                                 "prefix fti:<http://franz.com/ns/allegrograph/2.2/textindex/>",
-                                 "prefix skos:<http://www.w3.org/2004/02/skos/core#>",
-                           "select distinct ?dataType ?name ?url where { ",
-                           "?file tcga:url ?url .",
-                           "?file rdfs:label ?name .",
-                           "filter ( contains(?name, "+"\'"+".svs"+"\'"+") ) .",
-                           "?file tcga:data-type ?d.",
-                           "?d rdfs:label ?dataType.",
-                           "?file tcga:disease-study ?ds . ",
-                           "?ds rdfs:label "+"\'"+'tumor/'+this.diseaseName+"\'"+"."+"}"
-                           ];
-                           
-        var sparql_query=sparql_template.join(" ");
-                                                                              
-        TCGA.hub.query(sparql_query,function(error,data){console.log(error); that.patientsOfImageData=queryResultObj2Array(data,1);that.urls4PatientsOfImageData=queryResultObj2Array(data,2)});
-        
-        //result is an array where every element is a type of biomedical data
-      
-    };
-    
-    
-  Disease.prototype.getUrlsOfClinicalDataSets=function(){
-  	  var that=this;
-  	  var sparql_template= [ "prefix tcga:<http://purl.org/tcga/core#>",
-                                 "prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
-                                 "prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>",
-                                 "prefix owl:<http://www.w3.org/2002//07/owl#>",                       
-                                 "prefix dc:<http://purl.org/dc/ele07/owl#>",
-                                 "prefix dc:<http://purl.org/dc/elements/1.1/>",
-                                 "prefix dcterms:<http://purl.org/dc/terms/>",
-                                 "prefix foaf:<http://xmlns.com/foaf/0.1/>",
-                                 "prefix fti:<http://franz.com/ns/allegrograph/2.2/textindex/>",
-                                 "prefix skos:<http://www.w3.org/2004/02/skos/core#>",
-                           "select distinct ?url where { ",
-                           "?file tcga:url ?url .",                         
-                           "filter ( contains(?url, "+"\'"+'tumor/'+this.diseaseName+"\'"+") ) .",
-                           "filter ( contains(?url, "+"\'"+"clin"+"\'"+") ) .",
-                           "filter ( contains(?url, "+"\'"+".txt"+"\'"+") ) .",
-                           "filter ( contains(?url, "+"\'"+"public"+"\'"+") ) .",        
-                           "}"
-                           ];
-                           
-        var sparql_query=sparql_template.join(" ");
-                                                                                
-        TCGA.hub.query(sparql_query,function(error,data){console.log(error);that.urlsOfClinicalDataSets=queryResultObj2Array(data,0);});
-        
-        //result is an array where every element is a type of biomedical data
-  };
-  
-  
-   Disease.prototype.setClinUrlinTreeByDisease=function(lookUpTree,i,allDiseases){
-   	  var that=this;
-  	  var sparql_template= [ "prefix tcga:<http://purl.org/tcga/core#>",
-                                 "prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
-                                 "prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>",
-                                 "prefix owl:<http://www.w3.org/2002//07/owl#>",                       
-                                 "prefix dc:<http://purl.org/dc/ele07/owl#>",
-                                 "prefix dc:<http://purl.org/dc/elements/1.1/>",
-                                 "prefix dcterms:<http://purl.org/dc/terms/>",
-                                 "prefix foaf:<http://xmlns.com/foaf/0.1/>",
-                                 "prefix fti:<http://franz.com/ns/allegrograph/2.2/textindex/>",
-                                 "prefix skos:<http://www.w3.org/2004/02/skos/core#>",
-                           "select distinct ?url where { ",
-                           "?file tcga:url ?url .",                         
-                           "filter ( contains(?url, "+"\'"+'tumor/'+this.diseaseName+"\'"+") ) .",
-                           "filter ( contains(?url, "+"\'"+"clin"+"\'"+") ) .",
-                           "filter ( contains(?url, "+"\'"+".txt"+"\'"+") ) .",
-                           "filter ( contains(?url, "+"\'"+"public"+"\'"+") ) .",        
-                           "}"
-                           ];
-                           
-        var sparql_query=sparql_template.join(" ");
-                                                                                
-        TCGA.hub.query(sparql_query,function(error,data){
-                                                           console.log(error);
-                                                           that.urlsOfClinicalDataSets=queryResultObj2Array(data,0);
-                                                           lookUpTree[allDiseases[i]]['clin']['url']=that.urlsOfClinicalDataSets;
-                                                  
-                                                          });
-        
-   	  
-   	  
-   	 
-
-   }
- 
- 
-   Disease.prototype.setSubDataTypesInTreeByDisease=function(lookUpTree,i,allDiseases,mainDataType){
-   	                                                 
-   	                                                       var that= this;
-   	                                                       lookUpTree[allDiseases[i]][mainDataType]['url_colNames_map']=new Array();
-   	                                                          
-                                                           for(var j =0; j< lookUpTree[allDiseases[i]][mainDataType]['url'].length;j++){
-   	  		                                                     
-   	  		                                                     
-   	                  	                                        if(j==lookUpTree[allDiseases[i]][mainDataType]['url'].length){
-   	  	                                                        	 break;
-   	                                                       	     }	
- 	                                                          
- 	                                                           // console.log(i); 
- 	                                                          // console.log(j);
- 	                                                           // console.log('----');
- 	                                                           
- 	                                                            lookUpTree[allDiseases[i]][mainDataType]['url_colNames_map'].push( lookUpTree[allDiseases[i]][mainDataType]['url'][j]);
- 	                                                            
- 	                                                         // lookUpTree[allDiseases[i]][mainDataType]['url'][j]['subDataType']=new Array();
-  	                                                          TCGA.get(lookUpTree[allDiseases[i]][mainDataType]['url'][j], function(error,data){console.log(error);that.cuurentTbl=splitTbl2Array(data,false);that.currentColNames=that.cuurentTbl[0];lookUpTree[allDiseases[i]][mainDataType]['url_colNames_map'].push(that.currentColNames);}); 	     
-  	     
-  	                                                          
-                                                            }
-                                                          
-   }
- 
- 
- 
- 
- 
- 
-   Disease.prototype.getDataTypes=function(){
-   	var that=this;
-   	var sparql_template= [ "prefix tcga:<http://purl.org/tcga/core#>",
-                        "prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
-                        "prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>",
-                        "prefix owl:<http://www.w3.org/2002//07/owl#>",                       
-                        "prefix dc:<http://purl.org/dc/ele07/owl#>",
-                        "prefix dc:<http://purl.org/dc/elements/1.1/>",
-                        "prefix dcterms:<http://purl.org/dc/terms/>",
-                        "prefix foaf:<http://xmlns.com/foaf/0.1/>",
-                        "prefix fti:<http://franz.com/ns/allegrograph/2.2/textindex/>",
-                        "prefix skos:<http://www.w3.org/2004/02/skos/core#>",
-                           "select distinct ?type where { ",
-                           "?file tcga:data-type ?t . ",
-                           "?t rdfs:label ?type . ",
-                           "?file tcga:disease-study ?d . ",
-                           "?d rdfs:label "+"\'"+this.diseaseName+"\'"+"."+"}"
-                           ];
-                           
-        var sparql_query=sparql_template.join(" ");                       // note :this refers to the windows
-        TCGA.hub.query(sparql_query,function(error,data){console.log(error);that.dataTypes= queryResultObj2Array(data,0);});
-   
-        
-        
-                 
-         
-       }
- 
- 
- 
- 
- Disease.prototype.getDataTypeByDisease=function(lookUpTree){
-   	var that=this;
-   	var sparql_template= [ "prefix tcga:<http://purl.org/tcga/core#>",
-                        "prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
-                        "prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>",
-                        "prefix owl:<http://www.w3.org/2002//07/owl#>",                       
-                        "prefix dc:<http://purl.org/dc/ele07/owl#>",
-                        "prefix dc:<http://purl.org/dc/elements/1.1/>",
-                        "prefix dcterms:<http://purl.org/dc/terms/>",
-                        "prefix foaf:<http://xmlns.com/foaf/0.1/>",
-                        "prefix fti:<http://franz.com/ns/allegrograph/2.2/textindex/>",
-                        "prefix skos:<http://www.w3.org/2004/02/skos/core#>",
-                           "select distinct ?type where { ",
-                           "?file tcga:data-type ?t . ",
-                           "?t rdfs:label ?type . ",
-                           "?file tcga:disease-study ?d . ",
-                           "?d rdfs:label "+"\'"+this.diseaseName+"\'"+"."+"}"
-                           ];
-                           
-        var sparql_query=sparql_template.join(" ");                       
-        TCGA.hub.query(sparql_query,function(error,data){
-        	                                              console.log(error);
-        	                                              that.dataTypes=data.results.bindings.map(function (obj) { return obj.type.value; });
-        	                                              lookUpTree[that.diseaseName]['dataType']=that.dataTypes;});
-   
-        
-        
-                 
-         
-       }
-  
-  
-
-  
-  Disease.prototype.fetchOneColInFile=function(lookUpTree,i,j,k,allDiseases,mainDataType,currentURL,resultColname,urlResultMapName){
-  	   
-  	   var that=this;
-  	   that.currentColNames=new Array();
-  	   
-  	   
-  	   lookUpTree[allDiseases[i]][mainDataType][urlResultMapName]=new Array();
-  	   
-  	   	   
-       lookUpTree[allDiseases[i]][mainDataType][urlResultMapName].push(currentURL);
-       
-  	   TCGA.get(currentURL, function(error,data){
-  	   	console.log(error);
-  	   	that.cuurentTbl=splitTbl2Array(data,false);
-  	   //	console.log(currentURL);
-  	   	that.currentColNames=that.cuurentTbl[0];
-  	    
-  	   	for(var idx=1; idx<that.cuurentTbl.length; idx++){
-  	   		if(idx==that.cuurentTbl.length){
-  	   			break;
-  	   		}
-  	   	//	console.log(that.currentColNames);
-  	   	    console.log(idx);
-  	   	    console.log(typeof that.currentColNames);
-  	   	    console.log(typeof that.cuurentTbl[idx]);
-  	   	    console.log('---');
-  	   	    that.tcga_barcodes=new Array();
-  	   		that.tcga_barcodes[idx-1]=that.cuurentTbl[idx][that.currentColNames.indexOf(resultColname)];
-  	   		lookUpTree[allDiseases[i]][mainDataType][urlResultMapName].push(that.tcga_barcodes);
-  	   		}
-  	   	});
-
-  }
-
-
-
-//assuming colnames are tab-separated
-  Disease.prototype.fetchColNames=function(url){
-  	   var that=this;
-  	   TCGA.get(url, function(error,data){console.log(error);that.cuurentTbl=splitTbl2Array(data,false);that.currentColNames=that.cuurentTbl[0];});
-  }
-
-  
-  
-  //assuming colnames are tab-separated
-  Disease.prototype.fetchRowColNames=function(url,ColIndexForRowName){
-  	   var that=this;
-  	   TCGA.get(url, function(error,data){console.log(error);that.cuurentTbl=splitTbl2Array(data,false);that.currentColNames=that.cuurentTbl[0];that.tcga_barcodes=new Array();for(var i=1; i<that.cuurentTbl.length; i++){that.tcga_barcodes[i-1]=that.cuurentTbl[i][ColIndexForRowName];}});
-  }
-
-  
-  
-
-
-//static functions for building look-up  tree
-  function getAllDiseaseTypes(){
-  	  var sparql_template= [ "prefix tcga:<http://purl.org/tcga/core#>",
-                        "prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
-                        "prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>",
-                        "prefix owl:<http://www.w3.org/2002//07/owl#>",                       
-                        "prefix dc:<http://purl.org/dc/ele07/owl#>",
-                        "prefix dc:<http://purl.org/dc/elements/1.1/>",
-                        "prefix dcterms:<http://purl.org/dc/terms/>",
-                        "prefix foaf:<http://xmlns.com/foaf/0.1/>",
-                        "prefix fti:<http://franz.com/ns/allegrograph/2.2/textindex/>",
-                        "prefix skos:<http://www.w3.org/2004/02/skos/core#>",
-                           "select  distinct ?diseaseType where { ",
-                           "?file tcga:disease-study ?diseases .",
-                           "?diseases rdfs:label ?diseaseType.",
-                           "}"
-                           ];
-                           
-        var sparql_query=sparql_template.join(" ");                      
-        TCGA.hub.query(sparql_query,function(error,data){
-        	console.log(error);
-        	allDiseaseTypes=data.results.bindings.map(function (obj) { return obj.diseaseType.value; });
-        });
-      
-  }
-  
-
+window.setTimeout(function(){startProcess();},5000);
 
 
 
@@ -433,8 +54,7 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
 
 
 
-
-
+function startProcess(){
 
  var lookUpTree={};
  lookUpTree['disease']=new Array();
@@ -529,12 +149,7 @@ for (var rowIdx=0; rowIdx<numofFunctions ; rowIdx++){
    	 button_3.setAttribute('value',currentFunctions[rowIdx+2]);
    	 
    	 
-     // button_1.setAttribute('class','show_dialog');
-     // button_2.setAttribute('class','show_dialog');
-   	 // button_3.setAttribute('class','show_dialog');	 
-   	 
-   	 
-   	 
+     
    	 
    	 cell_1.appendChild(button_1);
    	 cell_2.appendChild(button_2);
@@ -578,7 +193,7 @@ window.setTimeout(function(){processingDiseaseType();},20000);
  	
  
  
- function processingDiseaseType(callback){
+    function processingDiseaseType(callback){
  	
  	 for(var j=0; j<allDiseaseTypes.length; j++){
  	//  allDiseases[j]=allDiseaseTypes[j][0].toString().replace(/\"/g,"");
@@ -597,18 +212,53 @@ window.setTimeout(function(){processingDiseaseType();},20000);
  	 }
 
  	   	  
-}
+   }
  	 	 	 	
 
 
-// Ext.define('ResultView', {
-    // extend: 'Ext.data.Model',
-    // fields: [ 'disease', 'dataType', 'url', 'barcode' ]
-// });
+
+
+
+var ViewDiv=document.createElement("div");
+ViewDiv.setAttribute("id", "view_div");
+ViewDiv.setAttribute("align","float:left");
+//customCtrlDiv.style.paddingLeft="15px";
+template_div_node.appendChild(ViewDiv);
+
+
+
+
+ 
+   var lookUpStore = Ext.create('Ext.data.TreeStore', {
+     root: { 
+     	     text:"lookUpTree",
+             expanded: true,
+        children: [
+                    {  text: "disease", 
+                       expanded: true 
+                    },
+            { text: "homework", expanded: true, children: [
+                { text: "book report", leaf: true },
+                { text: "alegrbra", leaf: true}
+            ] },
+            { text: "buy lottery tickets", leaf: true }
+        ]
+           }
+    });
+
+
+   Ext.create('Ext.tree.Panel', {
+    title: 'Simple Tree',
+    width: 200,
+    height: 150,
+    store: lookUpStore,
+    rootVisible: true,
+    renderTo:  ViewDiv
+   });
+
 
     
-
-
+}
 
 
 
