@@ -173,21 +173,25 @@ window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDise
   	 
   	   
   	   aDisease.getDataTypeByDisease(lookUpTree);
-       var currentNode=extTree.store.tree.root.childNodes[k];
-  	   window.setTimeout(function(){feedDataType2ExtTree(lookUpTree,allDiseaseTypes,currentNode,disName);},10000);
+       
+  	   
 
     }
-    
+      window.setTimeout(function(){feedDataType2ExtTree(lookUpTree,allDiseaseTypes);},10000);
   }
 
 
 
-    function feedDataType2ExtTree(lookUpTree,allDiseaseTypes,currentNode,disName){
-    	
-    	      for(var idx=0; idx<lookUpTree[disName]['dataType'].length; idx++){
+    function feedDataType2ExtTree(lookUpTree,allDiseaseTypes){
+    	 
+    	   for(var i=0; i<extTree.store.tree.root.childNodes.length; i++){
+    	   	  var currentNode=extTree.store.tree.root.childNodes[i];
+    	      for(var idx=0; idx<lookUpTree[allDiseaseTypes[i]]['dataType'].length; idx++){
   	                  	 	    	                  	 	 
-               	     currentNode.appendChild({id: lookUpTree[disName]['dataType'][idx], text:lookUpTree[disName]['dataType'][idx], expanded: true});	
+               	     currentNode.appendChild({id: lookUpTree[allDiseaseTypes[i]]['dataType'][idx], text:lookUpTree[allDiseaseTypes[i]]['dataType'][idx], expanded: true});	
   	         }
+    	   }
+    	      
                       
   	   }
 
