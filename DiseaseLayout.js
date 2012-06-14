@@ -192,8 +192,50 @@ window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDise
   	         }
     	   }
     	      
-                      
+             fillUrlsGivenDataType(allDiseaseTypes,lookUpTree);         
   	   }
+
+
+
+    function fillUrlsGivenDataType(allDiseaseTypes,lookUpTree){
+    	for(var i=0; i<allDiseaseTypes.length ; i++){
+    		
+    		if(i==allDiseaseTypes.length){
+    			break;
+    		}
+    		
+    		var numOfDataTypes=lookUpTree[allDiseaseTypes[i]]['dataType'].length;
+    		
+    		for(var j=0;j<numOfDataTypes ;j++){
+    			
+    			
+    			if(j==numOfDataTypes){
+    				 break;
+    			}
+    			
+    		    if(lookUpTree[allDiseaseTypes[i]]['dataType'][j].match(/slide_images/)){
+    		    	lookUpTree[allDiseaseTypes[i]]['slide_images']={};  		    	
+    		    	lookUpTree[allDiseaseTypes[i]]['slide_images']['url']=new Array();
+    		    	
+    		    }
+    		    
+    		    
+    		      if(lookUpTree[allDiseaseTypes[i]]['dataType'][j].match(/clin/)){
+    		    	lookUpTree[allDiseaseTypes[i]]['clin']={};
+    		    	lookUpTree[allDiseaseTypes[i]]['clin']['url']=new Array();
+    		    	
+    		    	var aDisease=new Disease(allDiseaseTypes[i]);
+    		    	aDisease.setClinUrlinTreeByDisease(lookUpTree,i,allDiseaseTypes);
+    		    
+    		    	
+    		    }	
+    		    
+    		    	
+    		}
+    	}
+    }
+
+
 
 
 
