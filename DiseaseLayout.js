@@ -152,30 +152,44 @@ window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDise
  	   	  
  	 }
      
-     
+      feedDataType2BackEndTree(lookUpTree,allDiseaseTypes);
        
    }
  	 	 	 	
 
 
-    function feedDataType2ExtTree(lookUpTree){
-    	
-
-  	 for(var k=0; k<allDiseases.length; k++){
-  
+   function feedDataType2BackEndTree(lookUpTree,allDiseaseTypes){
+     	
+      
+  	 for(var k=0; k<allDiseaseTypes.length; k++){
+        
   	   if(k==25){
   	   	  break;
   	   }
-  	   var aDisease=new Disease(allDiseases[k]);
+  	   
+  	   
+  	   var aDisease=new Disease(allDiseaseTypes[k]);	
+  	   var disName=aDisease.diseaseName;
+  	 
+  	   
   	   aDisease.getDataTypeByDisease(lookUpTree);
-  	 
-  	 
+       var currentNode=extTree.store.tree.root.childNodes[k];
+  	   window.setTimeout(function(){feedDataType2ExtTree(lookUpTree,allDiseaseTypes,currentNode,disName);},10000);
 
- 	  	  	  	
- 	  	  	  	console.log(k);
- 	   }
-  	
     }
+    
+  }
+
+
+
+    function feedDataType2ExtTree(lookUpTree,allDiseaseTypes,currentNode,disName){
+    	
+    	      for(var idx=0; idx<lookUpTree[disName]['dataType'].length; idx++){
+  	                  	 	    	                  	 	 
+               	     currentNode.appendChild({id: lookUpTree[disName]['dataType'][idx], text:lookUpTree[disName]['dataType'][idx], expanded: true});	
+  	         }
+                      
+  	   }
 
 
 
@@ -260,7 +274,7 @@ for (var rowIdx=0; rowIdx<numofFunctions ; rowIdx++){
    	 cell_3.appendChild(button_3);
    	 
 	 rowIdx=rowIdx+2; 
-	 
+
 } 
 
   buttonTable.cellPadding="25";
@@ -271,11 +285,11 @@ for (var rowIdx=0; rowIdx<numofFunctions ; rowIdx++){
 
    for(var idx=0; idx<$(':button').length; idx++){
 	  var buttonName=$(':button')[idx].value;
-	
+
 	  if(buttonName.match(/name/i)||buttonName.match(/type/i)){
 		 $(':button')[idx].setAttribute('class','flat');
 	 } 
-	
+
   }
 
 
@@ -288,6 +302,3 @@ for (var rowIdx=0; rowIdx<numofFunctions ; rowIdx++){
 
 
 }
-
-
-
