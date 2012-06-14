@@ -33,12 +33,16 @@ css.setAttribute('href', 'https://dl.dropbox.com/u/79021836/ext-4.1.0-gpl/extjs-
 document.head.appendChild(css);
 
 
+var lookUpTree={};
+lookUpTree['disease']=new Array();
+ 
+ 
+ var aDisease={};
+
+ var currentWindow=this;
 
 
-
-
-window.setTimeout(function(){startProcess();},5000);
-
+window.setTimeout(function(){startProcess(lookUpTree);},5000);
 
 
 
@@ -54,24 +58,51 @@ window.setTimeout(function(){startProcess();},5000);
 
 
 
-function startProcess(){
+function startProcess(lookUpTree){
 
- var lookUpTree={};
- lookUpTree['disease']=new Array();
+ var currentWin=this;
  
- 
- var allDiseases=new Array();
- var aDisease={};
  getAllDiseaseTypes();
   	
-window.setTimeout(function(){processingDiseaseType();},20000);
 
-
-
+  	
+window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDiseaseTypes);},10000);
  
-//  time interval here 
  	
+ 	
+ 	
+ 
+ 
+    function processingDiseaseType(lookUpTree,allDiseaseTypes){
+ 	  console.log(allDiseaseTypes.length);
+ 	 for(var j=0; j<allDiseaseTypes.length; j++){
+      
+ 	  lookUpTree['disease'].push (allDiseaseTypes[j]);	
+ 	  lookUpTree[allDiseaseTypes[j]]={};
+ 	  lookUpTree[allDiseaseTypes[j]]['dataType']=new Array();
+ 	  
+      var option=document.createElement('option');
+      option.setAttribute('value',allDiseaseTypes[j]);
+      var optionText=document.createTextNode(allDiseaseTypes[j]);
+      if(j==0){
+      	  option.setAttribute('selected','selected');
+      }
+      option.appendChild(optionText);
+ 	  cancerTypeSelector.appendChild(option); 	  
+ 	 }
 
+ 	   	  
+   }
+ 	 	 	 	
+
+
+
+
+var ViewDiv=document.createElement("div");
+ViewDiv.setAttribute("id", "view_div");
+ViewDiv.setAttribute("align","float:left");
+//customCtrlDiv.style.paddingLeft="15px";
+document.body.appendChild(ViewDiv);
 
 
 
@@ -178,52 +209,11 @@ for(var idx=0; idx<$(':button').length; idx++){
 
 
 
- var lookUpTree={};
- lookUpTree['disease']=new Array();
  
- 
- var allDiseases=new Array();
- var aDisease={};
- getAllDiseaseTypes();
-  	
-window.setTimeout(function(){processingDiseaseType();},20000);
- 
- 	
- 	
- 	
- 
- 
-    function processingDiseaseType(callback){
- 	
- 	 for(var j=0; j<allDiseaseTypes.length; j++){
- 	//  allDiseases[j]=allDiseaseTypes[j][0].toString().replace(/\"/g,"");
- 	  lookUpTree['disease'].push (allDiseaseTypes[j]);	
- 	  lookUpTree[allDiseaseTypes[j]]={};
- 	  lookUpTree[allDiseaseTypes[j]]['dataType']=new Array();
- 	  
-      var option=document.createElement('option');
-      option.setAttribute('value',allDiseaseTypes[j]);
-      var optionText=document.createTextNode(allDiseaseTypes[j]);
-      if(j==0){
-      	  option.setAttribute('selected','selected');
-      }
-      option.appendChild(optionText);
- 	  cancerTypeSelector.appendChild(option); 	  
- 	 }
-
- 	   	  
-   }
- 	 	 	 	
 
 
 
 
-
-var ViewDiv=document.createElement("div");
-ViewDiv.setAttribute("id", "view_div");
-ViewDiv.setAttribute("align","float:left");
-//customCtrlDiv.style.paddingLeft="15px";
-template_div_node.appendChild(ViewDiv);
 
 
 
