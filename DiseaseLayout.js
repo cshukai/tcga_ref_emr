@@ -14,7 +14,10 @@ ScriptNode.setAttribute('type','text/javascript');
 ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/TCGA_Ref_EMR/DiseaseClass.js');
 document.head.appendChild(ScriptNode);
 
-
+var ScriptNode=document.createElement('script');
+ScriptNode.setAttribute('type','text/javascript');
+ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/library/caolan-async-4351b56/lib/async.js');
+document.head.appendChild(ScriptNode);
 
 
 
@@ -40,10 +43,9 @@ lookUpTree['disease']=new Array();
  var aDisease={};
 
  var currentWindow=this;
-
+ var extTree={};
 
 window.setTimeout(function(){startProcess(lookUpTree);},5000);
-
 
 
 
@@ -61,12 +63,63 @@ window.setTimeout(function(){startProcess(lookUpTree);},5000);
 function startProcess(lookUpTree){
 
  var currentWin=this;
+
+
+
+
+ /*
+  *  ExtJs viewers
+  */
+
+
+
+var ViewDiv=document.createElement("div");
+ViewDiv.setAttribute("id", "view_div");
+ViewDiv.setAttribute("align","float:left");
+document.body.appendChild(ViewDiv);
+
+
+
+
+
+
+   Ext.require(['Ext.data.TreeStore','Ext.tree.Panel','Ext.data.Tree']);
+
+ 
+   var lookUpStore = Ext.create('Ext.data.TreeStore', {
+     root: { 
+     	     
+     	     text: "disease",
+             expanded: true
+          
+           }
+    });
+
+
+   Ext.create('Ext.tree.Panel', {
+    id:'lookUpTree',
+    title: 'lookUpTree',
+    width: 200,
+    height: 150,
+    store: lookUpStore,
+    rootVisible: true,
+    renderTo:  ViewDiv
+   });
+
+   
+     currentWindow.extTree=Ext.getCmp('lookUpTree');
+    
+    
+    
+
+
+
  
  getAllDiseaseTypes();
-  	
+   	
 
   	
-window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDiseaseTypes);},10000);
+window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDiseaseTypes);},20000);
  
  	
  	
@@ -75,7 +128,7 @@ window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDise
  
     function processingDiseaseType(lookUpTree,allDiseaseTypes){
  	  console.log(allDiseaseTypes.length);
- 	 for(var j=0; j<allDiseaseTypes.length; j++){
+ 	  for(var j=0; j<allDiseaseTypes.length; j++){
       
  	  lookUpTree['disease'].push (allDiseaseTypes[j]);	
  	  lookUpTree[allDiseaseTypes[j]]={};
@@ -88,21 +141,41 @@ window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDise
       	  option.setAttribute('selected','selected');
       }
       option.appendChild(optionText);
- 	  cancerTypeSelector.appendChild(option); 	  
- 	 }
-
+ 	  cancerTypeSelector.appendChild(option);
+ 	  
+ 	  
+ 	  extTree.store.tree.root.appendChild({id:allDiseaseTypes[j], text: allDiseaseTypes[j], expanded: true});
+ 	  
+ 	  
+ 	  
+ 	  
  	   	  
+ 	 }
+     
+     
+       
    }
  	 	 	 	
 
 
+    function feedDataType2ExtTree(lookUpTree){
+    	
 
+  	 for(var k=0; k<allDiseases.length; k++){
+  
+  	   if(k==25){
+  	   	  break;
+  	   }
+  	   var aDisease=new Disease(allDiseases[k]);
+  	   aDisease.getDataTypeByDisease(lookUpTree);
+  	 
+  	 
 
-var ViewDiv=document.createElement("div");
-ViewDiv.setAttribute("id", "view_div");
-ViewDiv.setAttribute("align","float:left");
-//customCtrlDiv.style.paddingLeft="15px";
-document.body.appendChild(ViewDiv);
+ 	  	  	  	
+ 	  	  	  	console.log(k);
+ 	   }
+  	
+    }
 
 
 
@@ -190,20 +263,20 @@ for (var rowIdx=0; rowIdx<numofFunctions ; rowIdx++){
 	 
 } 
 
-buttonTable.cellPadding="25";
-buttonTable.cellSpacing="15";
-customCtrlDiv.appendChild(buttonTable);
+  buttonTable.cellPadding="25";
+  buttonTable.cellSpacing="15";
+  customCtrlDiv.appendChild(buttonTable);
 
 
 
-for(var idx=0; idx<$(':button').length; idx++){
-	var buttonName=$(':button')[idx].value;
+   for(var idx=0; idx<$(':button').length; idx++){
+	  var buttonName=$(':button')[idx].value;
 	
-	if(buttonName.match(/name/i)||buttonName.match(/type/i)){
-		$(':button')[idx].setAttribute('class','flat');
-	} 
+	  if(buttonName.match(/name/i)||buttonName.match(/type/i)){
+		 $(':button')[idx].setAttribute('class','flat');
+	 } 
 	
-}
+  }
 
 
 
@@ -214,40 +287,6 @@ for(var idx=0; idx<$(':button').length; idx++){
 
 
 
-
-
-
-
- 
-   var lookUpStore = Ext.create('Ext.data.TreeStore', {
-     root: { 
-     	     text:"lookUpTree",
-             expanded: true,
-        children: [
-                    {  text: "disease", 
-                       expanded: true 
-                    },
-            { text: "homework", expanded: true, children: [
-                { text: "book report", leaf: true },
-                { text: "alegrbra", leaf: true}
-            ] },
-            { text: "buy lottery tickets", leaf: true }
-        ]
-           }
-    });
-
-
-   Ext.create('Ext.tree.Panel', {
-    title: 'Simple Tree',
-    width: 200,
-    height: 150,
-    store: lookUpStore,
-    rootVisible: true,
-    renderTo:  ViewDiv
-   });
-
-
-    
 }
 
 
