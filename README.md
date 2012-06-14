@@ -13,6 +13,6 @@ Copy the following link into "Load module by URL" box and click on "Load module"
 https://dl.dropbox.com/u/79021836/TCGA_Ref_EMR/DataCubeViewer.js
 
 
-2. To see how current methods of Class Disease:
+2. To see how current methods of  Disease Class work:
 
 http://dl.dropbox.com/u/79021836/TCGA_Ref_EMR/DiseaseLayout.js
