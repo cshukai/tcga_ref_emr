@@ -99,10 +99,11 @@ document.body.appendChild(ViewDiv);
    Ext.create('Ext.tree.Panel', {
     id:'lookUpTree',
     title: 'lookUpTree',
-    width: 200,
-    height: 150,
+    width: 400,
+    height: 300,
     store: lookUpStore,
     rootVisible: true,
+    resizable:true,
     renderTo:  ViewDiv
    });
 
@@ -233,10 +234,38 @@ window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDise
     		    	
     		}
     	}
+    	
+    	window.setTimeout(function(){fillUrlsInTreeView(lookUpTree,allDiseaseTypes);},30000);
     }
 
 
-
+   function fillUrlsInTreeView(lookUpTree,allDiseaseTypes){
+   	   for(var i=0; i<extTree.store.tree.root.childNodes.length; i++){
+   	   	
+    	   	  var currentNode=extTree.store.tree.root.childNodes[i];
+    	   	  for(var a=0;a<currentNode.childNodes.length; a++){
+    	   	  	  var currentDataTypeNode=currentNode.childNodes[a];
+    	   	  	  var currentDataTypeNodeID=currentDataTypeNode.get('id');
+    	   	  	  //console.log(currentDataTypeNodeID);
+    	   	  	  if(currentDataTypeNodeID=='clin'){
+    	   	  	  //	console.log('here');
+    	   	  	  	currentDataTypeNode.appendChild({id: 'url', text:'data_url', expanded: true});
+    	   	  	  	var urlNode=currentDataTypeNode.childNodes[0];                                                    
+                    for(var index=0; index<lookUpTree[allDiseaseTypes[i]]['clin']['url'].length;index++){
+                    urlNode.appendChild({ text:lookUpTree[allDiseaseTypes[i]]['clin']['url'][index], leaf:true});	
+    	   	  	  }
+    	   	  	  
+    	   	  	  
+                                                     	
+                 }
+    	   	  }
+    	
+                 
+                 
+                                    
+    	      
+    }
+   }
 
 
 var template_div_node=document.getElementById('main');
