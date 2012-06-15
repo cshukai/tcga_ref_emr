@@ -195,7 +195,7 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
                                                                                 
         TCGA.hub.query(sparql_query,function(error,data){
                                                            console.log(error);
-                                                           that.urlsOfClinicalDataSets=queryResultObj2Array(data,0);
+                                                           that.urlsOfClinicalDataSets=data.results.bindings.map(function (obj) { return obj.url.value; });;
                                                            lookUpTree[allDiseases[i]]['clin']['url']=that.urlsOfClinicalDataSets;
                                                   
                                                           });
@@ -363,6 +363,7 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
 
 //static functions for building look-up  tree
   function getAllDiseaseTypes(){
+  	  var that= this;
   	  var sparql_template= [ "prefix tcga:<http://purl.org/tcga/core#>",
                         "prefix rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
                         "prefix rdfs:<http://www.w3.org/2000/01/rdf-schema#>",
@@ -382,7 +383,8 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
         var sparql_query=sparql_template.join(" ");                      
         TCGA.hub.query(sparql_query,function(error,data){
         	console.log(error);
-        	allDiseaseTypes=data.results.bindings.map(function (obj) { return obj.diseaseType.value; });
+        	that.allDiseaseTypes=data.results.bindings.map(function (obj) { return obj.diseaseType.value; });
+        	
         });
       
   }
