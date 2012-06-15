@@ -52,7 +52,6 @@ function splitTbl2Array(tbl,hasColName){
    	    var thisLine=allText[i].split("\t");
    	    for(j=0;j<colNum;j++){
    	    	tabularData[tblRowIdx][j]=thisLine[j];
-   	    	//console.log(tabularData[i,j]);
    	    }
    	     
    }
@@ -219,14 +218,16 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
    	  	                                                        	 break;
    	                                                       	     }	
  	                                                          
- 	                                                           // console.log(i); 
- 	                                                          // console.log(j);
- 	                                                           // console.log('----');
+ 	                                                          
  	                                                           
  	                                                            lookUpTree[allDiseases[i]][mainDataType]['url_colNames_map'].push( lookUpTree[allDiseases[i]][mainDataType]['url'][j]);
  	                                                            
- 	                                                         // lookUpTree[allDiseases[i]][mainDataType]['url'][j]['subDataType']=new Array();
-  	                                                          TCGA.get(lookUpTree[allDiseases[i]][mainDataType]['url'][j], function(error,data){console.log(error);that.cuurentTbl=splitTbl2Array(data,false);that.currentColNames=that.cuurentTbl[0];lookUpTree[allDiseases[i]][mainDataType]['url_colNames_map'].push(that.currentColNames);}); 	     
+  	                                                            TCGA.get(lookUpTree[allDiseases[i]][mainDataType]['url'][j], function(error,data){
+  	                                                                                                                                            	console.log(error);
+  	                                                                                                                                             	that.cuurentTbl=splitTbl2Array(data,false);                                                                                                                                 
+  	                                                                                                                                            	that.currentColNames=that.cuurentTbl[0];
+  	                                                                                                                                             	lookUpTree[allDiseases[i]][mainDataType]['url_colNames_map'].push(that.currentColNames);
+  	                                                           	                                                                                 }); 	     
   	     
   	                                                          
                                                             }
