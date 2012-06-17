@@ -239,6 +239,37 @@ window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDise
     }
 
 
+
+  function fillSubDataTypeInTreeView(allDiseaseTypes,lookUpTree){
+   	       for(var i=0; i<extTree.store.tree.root.childNodes.length; i++){
+   	   	
+    	   	  var currentNode=extTree.store.tree.root.childNodes[i];
+    	   	  for(var a=0;a<currentNode.childNodes.length; a++){
+    	   	  	  var currentDataTypeNode=currentNode.childNodes[a];
+    	   	  	  var currentDataTypeNodeID=currentDataTypeNode.get('id');
+    	   	  	  
+    	   	  	  if(currentDataTypeNodeID=='clin'){
+    	   	  	  	currentDataTypeNode.appendChild({id: 'columns', text:'data_fields', expanded: true});
+                    var colNode=currentDataTypeNode.childNodes[0];
+                     for(var index=0; index<lookUpTree[allDiseaseTypes[i]]['clin']['url'].length;index++){
+                        colNode.appendChild({ text:lookUpTree[allDiseaseTypes[i]]['clin']['url'][index] ,leaf:true});	
+    	   	  	  }
+    	   	  	  
+    	   	  	  
+                                                     	
+                 }
+    	   	  }
+    	                	      
+      }
+   }
+
+
+
+
+
+
+
+
    function fillUrlsInTreeView(lookUpTree,allDiseaseTypes){
    	   for(var i=0; i<extTree.store.tree.root.childNodes.length; i++){
    	   	
@@ -248,11 +279,11 @@ window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDise
     	   	  	  var currentDataTypeNodeID=currentDataTypeNode.get('id');
     	   	  	  //console.log(currentDataTypeNodeID);
     	   	  	  if(currentDataTypeNodeID=='clin'){
-    	   	  	  //	console.log('here');
+    	   	  	  	console.log('here');
     	   	  	  	currentDataTypeNode.appendChild({id: 'url', text:'data_url', expanded: true});
     	   	  	  	var urlNode=currentDataTypeNode.childNodes[0];                                                    
                     for(var index=0; index<lookUpTree[allDiseaseTypes[i]]['clin']['url'].length;index++){
-                    urlNode.appendChild({ text:lookUpTree[allDiseaseTypes[i]]['clin']['url'][index], leaf:true});	
+                    urlNode.appendChild({ text:lookUpTree[allDiseaseTypes[i]]['clin']['url'][index] ,leaf:true});	
     	   	  	  }
     	   	  	  
     	   	  	  
@@ -264,8 +295,54 @@ window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDise
                  
                                     
     	      
-    }
+      }
+     // fillSubDataTypeGivenDataType(allDiseaseTypes,lookUpTree);
    }
+   
+   
+   
+   
+   
+  function fillSubDataTypeGivenDataType(allDiseases,lookUpTree){
+    	for(var i=0; i<allDiseases.length ; i++){
+    		
+    		if(i==allDiseases.length){
+    			break;
+    		}
+    		
+    		var numOfDataTypes=lookUpTree[allDiseases[i]]['dataType'].length;
+    		
+    		for(var j=0;j<numOfDataTypes ;j++){
+    			
+    			
+    			if(j==numOfDataTypes){
+    				 break;
+    			}
+    			
+    		    if(lookUpTree[allDiseases[i]]['dataType'][j].match(/slide_images/)){
+    		    	lookUpTree[allDiseases[i]]['slide_images']['url']['tcga_barcode']=new Array();
+    		    }
+    		    
+    		    
+    		      if(lookUpTree[allDiseases[i]]['dataType'][j].match(/clin/)){
+    		     
+    		    	var aDisease=new Disease(allDiseases[i]);
+    		    	
+    		    	aDisease.setSubDataTypesInTreeByDisease(lookUpTree,i,allDiseases,'clin');
+    		    	
+    		    }	
+    		    
+    		    	
+    		}
+    	}
+    	
+    	// window.setTimeout(function(){fillSubDataTypeInTreeView(allDiseases,lookUpTree);},30000);
+    	 
+    }
+ 
+   
+ 
+   
 
 
 var template_div_node=document.getElementById('main');
