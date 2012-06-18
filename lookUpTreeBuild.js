@@ -119,7 +119,7 @@ function startProcess(lookUpTree){
     		    	
     		}
     	}    	
-    	 window.setTimeout(function(){fillSubDataTypeGivenDataType(allDiseases,lookUpTree);},10000);
+    	 window.setTimeout(function(){fillSubDataTypeGivenDataType(allDiseaseTypes,lookUpTree);},10000);
     }
     
     
@@ -155,10 +155,132 @@ function startProcess(lookUpTree){
     		    	
     		}
     	}
-    	    	 
+        window.setTimeout(function(){fillBarcodeGivenDataType(allDiseaseTypes,lookUpTree);},10000);
     }
  
+ 
+ 
+ 
+ 
+ 
+   function fillBarcodeGivenDataType(allDiseases,lookUpTree){
+   	
+   	var q_1= async.queue(function (task_1, callback) {   
+    		         	                               var numOfDataTypes=lookUpTree[allDiseases[task_1.serialNo]]['dataType'].length;
+    		         	            
+    		         	                               var q_3=async.queue(function (task_3, callback) {
+    		         	                               	          // console.log(task_1.serialNo);
+    		         	                               	          // console.log(task_3.serialNo);
+    		         	                               	            
+    		         	                               	            if(lookUpTree[allDiseases[task_1.serialNo]]['dataType'][task_3.serialNo].match(/clin/)){
+    		                                                           
+    		                                                          var aDisease=new Disease(allDiseases[task_1.serialNo]);
+    		                                                          var totLen=lookUpTree[allDiseases[task_1.serialNo]]['clin']['url_colNames_map'].length;
+    		                                                          var start=totLen/2;
+    		    
+    		                                             
+    		                                                         var q_2 = async.queue(function (task_2, callback) {     		         	  		         	                                
+   		         	                                                  	//console.log('here');	         	                                          
+                                                                     var subDataTypes=lookUpTree[allDiseases[task_1.serialNo]]['clin']['url_colNames_map'][task_2.serialNo];
+                                                                      console.log(task_1.serialNo);
+    		         	                               	           console.log(task_2.serialNo);
+                                                                     console.log(subDataTypes.length);
+                                                                     
+    		    		                                            if(subDataTypes.indexOf("bcr_sample_barcode")> -1 ){
+    		    		                                            	//console.log('here');
+                                                                   	var urlIndex=k-totLen/2;
+    		    		                                         	var currentURL=lookUpTree[allDiseases[task_1.serialNo]]['clin']['url_colNames_map'][urlIndex];
+    		    	                                           	    aDisease.fetchOneColInFile(lookUpTree,task_1.serialNo,task_3.serialNo,task_2.serialNo,allDiseases,'clin',currentURL,'bcr_sample_barcode','url_barcode_map');
+                                                                    }
+                                                                    
+                                                                    
+                                                                    if(subDataTypes.indexOf("bcr_patient_barcode")> -1 ){
+    		    		                                            	console.log('here');
+                                                                   	var urlIndex=k-totLen/2;
+    		    		                                         	var currentURL=lookUpTree[allDiseases[task_1.serialNo]]['clin']['url_colNames_map'][urlIndex];
+    		    	                                           	    aDisease.fetchOneColInFile(lookUpTree,task_1.serialNo,task_3.serialNo,task_2.serialNo,allDiseases,'clin',currentURL,'bcr_patient_barcode','url_barcode_map');
+                                                                    }
+                                                                    
+                                                                    
+                                                                    
+                                                               }, 1); 
+                                                               
+                                                            for(var k=start;k<totLen;k++){
+    		    		
+    		    	        	                                       if(k==totLen){
+    		    	 		                                             break;
+    		    		                                               }
+    		    		                                             //  console.log(k);
+                                                                       q_2.push([{serialNo:k}], function (err) {
+                                                                     
+                                                                       });       		    		   		    		
+    		    	                                        }  	     
+                                                                 
+                                                          }  	
+    		         	                               	 
+    		         	                               	 
+    		         	                               	   
+    		         	                               	 
+    		         	                               	 
+    		         	                               	 
+    		         	                               	 },7);
+    		         	                               	 
+    		         	                               	 
+    		         	                               
+    		         	                               	 
+    		         	                               	 
+    		         	                               	 
+    		         	                               	 
+    		         	                               	 
     
+    		         	                                for(var j=0;j<numOfDataTypes ;j++){
+    			
+    			                                          
+    			                                          if(j==numOfDataTypes){
+    		                                                 break;
+    		                                              }
+    		                                             // console.log(j);
+    		                                              q_3.push([{serialNo:j}], function (err) {
+                                                              
+                                                            }
+                                                          );       
+    		                                              
+    			                                                                        
+    		                                  
+    		    	                                    }
+    		    	                                    
+    		    	                           
+    		    	                                   
+    		    	
+		    	
+    		    	
+    		   	
+    			
+    			
+    		},1);  
+                                                                
+                                                                
+                                                                
+                                                                
+	     for(var i=0; i<allDiseases.length ; i++){
+    		
+      		if(i==allDiseases.length){
+    			break;
+    			
+    		}
+    		
+    		q_1.push([{serialNo:i}], function (err) {
+                                                                  //console.log(err);
+                                                     }
+                     );       
+    		
+    		
+    
+    		
+    	}
+   
+  
+  }  
     
 }
 

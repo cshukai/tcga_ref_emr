@@ -156,21 +156,47 @@ function fillBarcodeGivenDataType(allDiseases,lookUpTree){
     		    	var aDisease=new Disease(allDiseases[i]);
     		    	var totLen=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'].length;
     		    	var start=totLen/2;
+    		    
+    		    
+    		         var q = async.queue(function (task, callback) {
+                                                                       var subDataTypes=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][k];
+    		    		                                               if(subDataTypes.indexOf("bcr_sample_barcode")> -1){
+    		    			                                                                                               var urlIndex=k-totLen/2;
+    		    			                                                                                               var currentURL=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][urlIndex];
+    		    		                                                                                                   aDisease.fetchOneColInFile(lookUpTree,i,j,k,allDiseases,'clin',currentURL,'bcr_sample_barcode','url_barcode_map');
+    		    	  													  		    	  							       callback();
+    		    	  													}  		    	  																									    
+                                                                   }, 
+                                                                   
+                                                                2);  	
     		    	for(var k=start;k<totLen;k++){
     		    		
     		    		if(k==totLen){
     		    			break;
     		    		}
+                        q.push([{serialNo:k}], function (err) {
+                                                                  console.log(err);
+                                                               });       		    		
     		    		
-    		    		
-    		    		var subDataTypes=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][k];
+    		    	}
+    		    	
+    	
+    		  
+                                        
+                  
+                                                                                        
+                                                                                        
+                                                                                        
     		    		if(subDataTypes.indexOf("bcr_sample_barcode")> -1){
     		    			
-    		    			var urlIndex=k-totLen/2;
+    		    			
     		    			var currentURL=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][urlIndex];
+    		    			
     		    		    aDisease.fetchOneColInFile(lookUpTree,i,j,k,allDiseases,'clin',currentURL,'bcr_sample_barcode','url_barcode_map');
     		    		}
-    		    	}
+                                                                                        
+                                                                                                          
+    		    	
     		    	
     		    }	
     			
@@ -184,40 +210,4 @@ function fillBarcodeGivenDataType(allDiseases,lookUpTree){
 
  fillBarcodeGivenDataType(allDiseases,lookUpTree)(allDiseases,lookUpTree);
  
-
-
-
-var cor = null; // cor stands for Cross-Origin request
-
-if (window.XMLHttpRequest) {
-    cor = new XMLHttpRequest();
-}
-//else if (window.XDomainRequest) {
-    //cor = new XDomainRequest();
-//}
-else {
-    alert("Your browser does not support Cross-Origin request!");
-    return;
-}
-
-cor.onreadystatechange = function () {
-    if (cor.readyState == 4) {
-         alert(cor.responseText);
-    }
-};
-
-var data = 'Some fake data';
-if (method == 'POST') {
-    cor.open('POST', 'http://live58.alwaysdata.net/test.php', true);
-    cor.withCredential = "true";
-    cor.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    cor.send('Data=' + data);
-}
-else if (method == 'GET') {
-    cor.open('GET', 'http://live58.alwaysdata.net/test.php?Data=' + data, true);
-    cor.withCredential = "true";
-    cor.send(null);
-}
-
-
 

@@ -16,3 +16,7 @@ https://dl.dropbox.com/u/79021836/TCGA_Ref_EMR/DataCubeViewer.js
 2. To see how current methods of  Disease Class work:
 
 http://dl.dropbox.com/u/79021836/TCGA_Ref_EMR/DiseaseLayout.js
+
+3. To construct  EMR Tree :
+
+https://dl.dropbox.com/u/79021836/TCGA_Ref_EMR/lookUpTreeBuild.js
