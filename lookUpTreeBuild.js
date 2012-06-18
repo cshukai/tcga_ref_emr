@@ -165,12 +165,17 @@ function startProcess(lookUpTree){
  
    function fillBarcodeGivenDataType(allDiseases,lookUpTree){
    	
-   	var q_1= async.queue(function (task_1, callback) {   
+   	var q_1= async.queue(function (task_1, callback) { 
+   		
+   		
+   		
+   		
+   		  
     		         	                               var numOfDataTypes=lookUpTree[allDiseases[task_1.serialNo]]['dataType'].length;
     		         	            
     		         	                               var q_3=async.queue(function (task_3, callback) {
     		         	                               	          // console.log(task_1.serialNo);
-    		         	                               	          // console.log(task_3.serialNo);
+    		         	                               	          
     		         	                               	            
     		         	                               	            if(lookUpTree[allDiseases[task_1.serialNo]]['dataType'][task_3.serialNo].match(/clin/)){
     		                                                           
@@ -182,9 +187,9 @@ function startProcess(lookUpTree){
     		                                                         var q_2 = async.queue(function (task_2, callback) {     		         	  		         	                                
    		         	                                                  	//console.log('here');	         	                                          
                                                                      var subDataTypes=lookUpTree[allDiseases[task_1.serialNo]]['clin']['url_colNames_map'][task_2.serialNo];
-                                                                      console.log(task_1.serialNo);
-    		         	                               	           console.log(task_2.serialNo);
-                                                                     console.log(subDataTypes.length);
+                                                                    //  console.log(task_1.serialNo);
+    		         	                               	       //    console.log(task_2.serialNo);
+                                                                //     console.log(subDataTypes.length);
                                                                      
     		    		                                            if(subDataTypes.indexOf("bcr_sample_barcode")> -1 ){
     		    		                                            	console.log('here');
@@ -205,18 +210,24 @@ function startProcess(lookUpTree){
                                                                     
                                                                }, 1); 
                                                                
+                                                            var  serialNumArray=[];   
                                                             for(var k=start;k<totLen;k++){
-    		    		
+    		    		                                       
     		    	        	                                       if(k==totLen){
     		    	 		                                             break;
     		    		                                               }
-    		    		                                             //  console.log(k);
-                                                                       q_2.push([{serialNo:k}], function (err) {
-                                                                     
-                                                                       });       		    		   		    		
+    		    		                                               
+    		    		                                        var serialNum={serialNo:k};
+    		    		                                        serialNumArray[k-start]=serialNum;       
+                                                                          		    		   		    		
     		    	                                        }  	     
+                                                           // console.log(serialNumArray.length);
+                                                           // console.log(serialNumArray);  
+                                                            q_2.push(serialNumArray, function (err) {
+                                                                              
+                                                                       });                                                    
                                                                  
-                                                          }  	
+                                                            }  	
     		         	                               	 
     		         	                               	 
     		         	                               	   
@@ -248,16 +259,8 @@ function startProcess(lookUpTree){
     			                                                                        
     		                                  
     		    	                                    }
-    		    	                                    
-    		    	                           
-    		    	                                   
-    		    	
-		    	
-    		    	
-    		   	
-    			
-    			
-    		},1);  
+     			
+    		},3);  
                                                                 
                                                                 
                                                                 
