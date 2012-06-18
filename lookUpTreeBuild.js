@@ -187,8 +187,8 @@ function startProcess(lookUpTree){
                                                                      console.log(subDataTypes.length);
                                                                      
     		    		                                            if(subDataTypes.indexOf("bcr_sample_barcode")> -1 ){
-    		    		                                            	//console.log('here');
-                                                                   	var urlIndex=k-totLen/2;
+    		    		                                            	console.log('here');
+                                                                   	var urlIndex=task_2.serialNo-totLen/2;
     		    		                                         	var currentURL=lookUpTree[allDiseases[task_1.serialNo]]['clin']['url_colNames_map'][urlIndex];
     		    	                                           	    aDisease.fetchOneColInFile(lookUpTree,task_1.serialNo,task_3.serialNo,task_2.serialNo,allDiseases,'clin',currentURL,'bcr_sample_barcode','url_barcode_map');
                                                                     }
@@ -196,7 +196,7 @@ function startProcess(lookUpTree){
                                                                     
                                                                     if(subDataTypes.indexOf("bcr_patient_barcode")> -1 ){
     		    		                                            	console.log('here');
-                                                                   	var urlIndex=k-totLen/2;
+                                                                   	var urlIndex=task_2.serialNo-totLen/2;
     		    		                                         	var currentURL=lookUpTree[allDiseases[task_1.serialNo]]['clin']['url_colNames_map'][urlIndex];
     		    	                                           	    aDisease.fetchOneColInFile(lookUpTree,task_1.serialNo,task_3.serialNo,task_2.serialNo,allDiseases,'clin',currentURL,'bcr_patient_barcode','url_barcode_map');
                                                                     }
