@@ -176,7 +176,7 @@ function startProcess(lookUpTree){
   	                                         	console.log(error);
   	                                         	
   	                                          	var cuurentTbl=splitTbl2Array(data,false);
-  	                                            var currentColNames=that.cuurentTbl[0];
+  	                                            var currentColNames=cuurentTbl[0];
   	    
     	   
   	                                         	for(var idx=1; idx<cuurentTbl.length; idx++){
@@ -187,13 +187,14 @@ function startProcess(lookUpTree){
   	 
   	   	                                          var tcga_barcodes=new Array();
   	   	                                          tcga_barcodes[idx-1]=cuurentTbl[idx][currentColNames.indexOf(task.resultColname)];
-  	   		                                      lookUpTree[allDiseases[task.idx_i]]['clin']['url_barcode_map'].push(that.tcga_barcodes);
+  	   		                                      lookUpTree[allDiseases[task.idx_i]]['clin']['url_barcode_map'].push(tcga_barcodes);
   	   		                                     }
-  	   		
+  	   		                             window.setTimeout(function(){ callback();},5000);        
+  	   		                         
   	   	                  });
 
   			
-  	     callback();
+  	     
   		},1);
   	
   	
