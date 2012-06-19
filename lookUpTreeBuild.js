@@ -189,7 +189,7 @@ function startProcess(lookUpTree){
   	   	                                          tcga_barcodes[idx-1]=cuurentTbl[idx][currentColNames.indexOf(task.resultColname)];
   	   		                                      lookUpTree[allDiseases[task.idx_i]]['clin']['url_barcode_map'].push(tcga_barcodes);
   	   		                                     }
-  	   		                             window.setTimeout(function(){ callback();},5000);        
+  	   		                             window.setTimeout(function(){ callback();},2000);        
   	   		                         
   	   	                  });
 
@@ -241,7 +241,7 @@ function startProcess(lookUpTree){
     		    			
     		    			var urlIndex=k-totLen/2;
     		    			var currentURL=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][urlIndex];
-    		    			 queueArray= queueArray.concat({idx_i:i,url:currentURL,resultColname:"bcr_sample_barcode"});
+    		    			 queueArray= queueArray.concat({idx_i:i,url:currentURL,resultColname:"bcr_patient_barcode"});
     		    		   
     		    		}
     		    		
