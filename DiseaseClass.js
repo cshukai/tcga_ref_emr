@@ -307,7 +307,7 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
 
   
   
-  Disease.prototype.fetchOneColInFile=function(lookUpTree,i,j,k,allDiseases,mainDataType,currentURL,resultColname,urlResultMapName){
+  Disease.prototype.fetchOneColInFile=function(lookUpTree,i,allDiseases,mainDataType,currentURL,resultColname,urlResultMapName){
   	   
   	   var that=this;
   	   that.currentColNames=new Array();
