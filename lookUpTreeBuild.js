@@ -175,6 +175,7 @@ function startProcess(lookUpTree){
   	                      	          
   	                                         	console.log(error);
   	                                         	
+  	                                         	lookUpTree[allDiseases[task.idx_i]]['clin']['url_barcode_map'].push(task.url);
   	                                          	var cuurentTbl=splitTbl2Array(data,false);
   	                                            var currentColNames=cuurentTbl[0];
   	    
@@ -214,11 +215,12 @@ function startProcess(lookUpTree){
     			if(j==numOfDataTypes){
     				 break;
     			}
-    			var clinicalSerialNo=[];
+    			
     		    if(lookUpTree[allDiseases[i]]['dataType'][j].match(/clin/)){
     		      
     		    	var aDisease=new Disease(allDiseases[i]);
     		    	lookUpTree[allDiseases[i]]['clin']['url_barcode_map']=new Array();
+    		    	
     		    	var totLen=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'].length;   		    	
     		    	var start=totLen/2;
     		    	for(var k=start;k<totLen;k++){
@@ -233,6 +235,7 @@ function startProcess(lookUpTree){
     		    			
     		    			var urlIndex=k-totLen/2;
     		    			var currentURL=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][urlIndex];
+    		    			
     		    		     queueArray= queueArray.concat({idx_i:i,url:currentURL,resultColname:"bcr_sample_barcode"});
     		    		}
     		    		
@@ -241,6 +244,7 @@ function startProcess(lookUpTree){
     		    			
     		    			var urlIndex=k-totLen/2;
     		    			var currentURL=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][urlIndex];
+    		    			 
     		    			 queueArray= queueArray.concat({idx_i:i,url:currentURL,resultColname:"bcr_patient_barcode"});
     		    		   
     		    		}
