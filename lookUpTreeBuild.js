@@ -190,7 +190,7 @@ function startProcess(lookUpTree){
   	   	                                          tcga_barcodes[idx-1]=cuurentTbl[idx][currentColNames.indexOf(task.resultColname)];
   	   		                                      lookUpTree[allDiseases[task.idx_i]]['clin']['url_barcode_map'].push(tcga_barcodes);
   	   		                                     }
-  	   		                             window.setTimeout(function(){ callback();},2000);        
+  	   		                             window.setTimeout(function(){ callback();},5000);        
   	   		                         
   	   	                  });
 
@@ -269,11 +269,6 @@ function startProcess(lookUpTree){
  
  
  
-   	
-   	
-   	
-   	
-   	
    	
    	
    	
