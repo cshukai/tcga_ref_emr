@@ -307,7 +307,7 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
 
   
   
-  Disease.prototype.fetchOneColInFile=function(lookUpTree,i,allDiseases,mainDataType,currentURL,resultColname,urlResultMapName){
+ Disease.prototype.fetchOneColInFile=function(lookUpTree,i,j,k,allDiseases,mainDataType,currentURL,resultColname,urlResultMapName){
   	   
   	   var that=this;
   	   that.currentColNames=new Array();
@@ -324,23 +324,32 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
   	   //	console.log(currentURL);
   	   	that.currentColNames=that.cuurentTbl[0];
   	    
+    	    // console.log('----');
+  	   	    // console.log(that.currentColNames.indexOf(resultColname));
+  	   	    // console.log('----'); 
+  	    
+  	    
   	   	for(var idx=1; idx<that.cuurentTbl.length; idx++){
   	   	
   	   		if(idx==that.cuurentTbl.length){
   	   			break;
   	   		}
   	   	//	console.log(that.currentColNames);
-  	   	    console.log(idx);
-  	   	    console.log(typeof that.currentColNames);
-  	   	    console.log(typeof that.cuurentTbl[idx]);
-  	   	    console.log('---');
+  	   	    // console.log(idx);
+  	   	    // console.log(typeof that.currentColNames);
+  	   	    // console.log(typeof that.cuurentTbl[idx]);
+  	   	    // console.log('---');
   	   	    that.tcga_barcodes=new Array();
+  	   	    
+  	   	   // console.log(that.cuurentTbl[idx][that.currentColNames.indexOf(resultColname)]);
   	   		that.tcga_barcodes[idx-1]=that.cuurentTbl[idx][that.currentColNames.indexOf(resultColname)];
   	   		lookUpTree[allDiseases[i]][mainDataType][urlResultMapName].push(that.tcga_barcodes);
   	   		}
+  	   		
   	   	});
 
   }
+
 
 
 
