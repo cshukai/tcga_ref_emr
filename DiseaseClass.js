@@ -116,31 +116,30 @@ Disease.prototype.send2Server=function(lookUpTree,serverURL){
     var that=this;
     that.dSet={};
 	that.dSet=lookUpTree[that.diseaseName];
-	
 	var allKeyNames=Object.keys(that.dSet);
-    that.d4submit={};
+    
+    var formContainer=document.createElement('form');
+    formContainer.setAttribute('id','d4sumbit');
+    formContainer.setAttribute('formaction',serverURL);
     for(var index=0; index<allKeyNames.length; index++){
-    	var keyname={};
-    	keyname=allKeyNames[index];
-    	
-    	that.d4submit[keyname]={};
-    	that.d4submit[keyname]=that.dSet[keyname];
-    	
-    	
+    	 var unitContainer={};
+         unitContainer=document.createElement('input');
+         unitContainer.setAttribute('name',allKeyNames[index]);
+         unitContainer.setAttribute('type','hidden');
+         unitContainer.setAttribute('value',JSON.stringify(that.dSet[allKeyNames[index]]));
+         
+         formContainer.appendChild(unitContainer);
     }
     
-	that.d4submit.diseaseName={};
-	that.d4submit.diseaseName=that.diseaseName;
-		
-	$.jsonp({
-             url:serverURL,
-             data:that.d4submit,
-             complete: function(xOptions, textStatus) {
-             	                console.log(that.d4submit);            	               
-                               console.log(textStatus);
-                       }
-                       
-    });
+     var unitContainer={};
+     unitContainer=document.createElement('input');
+     unitContainer.setAttribute('name','diseaseName');
+     unitContainer.setAttribute('type','hidden');
+     unitContainer.setAttribute('value',that.diseaseName);
+	 formContainer.appendChild(unitContainer);
+	 formContainer.method='post';
+	 formContainer.submit();
+
 }    
     
     
