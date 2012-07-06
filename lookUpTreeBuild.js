@@ -9,6 +9,18 @@ ScriptNode.setAttribute('type','text/javascript');
 ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/library/caolan-async-4351b56/lib/async.js');
 document.head.appendChild(ScriptNode);
 
+var ScriptNode=document.createElement('script');
+ScriptNode.setAttribute('type','text/javascript');
+ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/kinomics_backend/lib/jquery.jsonp-2.3.1.js');
+document.head.appendChild(ScriptNode);
+
+
+var css = document.createElement('link');
+css.setAttribute('rel', 'stylesheet');
+css.setAttribute('href', 'https://dl.dropbox.com/u/79021836/library/bootstrap/css/bootstrap.css');
+document.head.appendChild(css);
+
+
 
 var lookUpTree={};
 lookUpTree['disease']=new Array();

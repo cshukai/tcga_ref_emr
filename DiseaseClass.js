@@ -109,6 +109,42 @@ var  Disease=function(diseaseName){
     };
     
     
+    //current url :http://localhost:8080/tcga_ref_emr_backend/CatchLookUpTree
+    //Resource interpreted as Script but transferred with MIME type text/plain:
+    //"http://localhost:8080/tcga_ref_emr_backend/CatchLookUpTree?undefined=undefined&undefined=undefined&_1341597276753="
+Disease.prototype.send2Server=function(lookUpTree,serverURL){
+    var that=this;
+    that.dSet={};
+	that.dSet=lookUpTree[that.diseaseName];
+	
+	var allKeyNames=Object.keys(that.dSet);
+    that.d4submit={};
+    for(var index=0; index<allKeyNames.length; index++){
+    	var keyname={};
+    	keyname=allKeyNames[index];
+    	
+    	that.d4submit[keyname]={};
+    	that.d4submit[keyname]=that.dSet[keyname];
+    	
+    	
+    }
+    
+	that.d4submit.diseaseName={};
+	that.d4submit.diseaseName=that.diseaseName;
+		
+	$.jsonp({
+             url:serverURL,
+             data:that.d4submit,
+             complete: function(xOptions, textStatus) {
+             	                console.log(that.d4submit);            	               
+                               console.log(textStatus);
+                       }
+                       
+    });
+}    
+    
+    
+    
 Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
 	      var that=this;
           var sparql_template= [ "prefix tcga:<http://purl.org/tcga/core#>",
