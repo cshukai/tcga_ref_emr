@@ -1,5 +1,5 @@
 
-var serverURL;
+var serverURL='http://localhost:8080/cors-demo/cors-resource.html';
 
 function createCORSRequest(method, url) {
   var xhr = new XMLHttpRequest();
@@ -10,8 +10,8 @@ function createCORSRequest(method, url) {
     // Check if the XMLHttpRequest object has a "withCredentials" property.
     // "withCredentials" only exists on XMLHTTPRequest2 objects.
     xhr.open(method, url, true);
-    xhr.withCredentials-true;  
-
+    xhr.withCredentials=true;  
+   
   } else if (typeof XDomainRequest != "undefined") {
 
     // Otherwise, check if XDomainRequest.
@@ -33,6 +33,10 @@ var xhr = createCORSRequest('POST',serverURL);
 if (!xhr) {
   throw new Error('CORS not supported');
 }
+
+
+//xhr.setRequestHeader('X-Test-1', 'value');
+xhr.send();
 
 
 
