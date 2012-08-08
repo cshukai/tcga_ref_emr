@@ -1,44 +1,14 @@
-
-var serverURL='http://localhost:8080/cors-demo/cors-resource.html';
-
-function createCORSRequest(method, url) {
-  var xhr = new XMLHttpRequest();
-  
-  
-  if ("withCredentials" in xhr) {
-
-    // Check if the XMLHttpRequest object has a "withCredentials" property.
-    // "withCredentials" only exists on XMLHTTPRequest2 objects.
-    xhr.open(method, url, true);
-    xhr.withCredentials=true;  
-   
-  } else if (typeof XDomainRequest != "undefined") {
-
-    // Otherwise, check if XDomainRequest.
-    // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-    xhr = new XDomainRequest();
-    xhr.open(method, url);
-
-  } else {
-
-    // Otherwise, CORS is not supported by the browser.
-    xhr = null;
-
-  }
-  return xhr;
-}
+var patient_collection_id='457';
+var deployment= "https://uab.s3db.org/s3db";
+var username = "shukai";
+var password = "12345"; 
 
 
-var xhr = createCORSRequest('POST',serverURL);
-if (!xhr) {
-  throw new Error('CORS not supported');
-}
 
-
-//xhr.setRequestHeader('X-Test-1', 'value');
-xhr.send();
-
-
+var ScriptNode=document.createElement('script');
+ScriptNode.setAttribute('type','text/javascript');
+ScriptNode.setAttribute('src','https://raw.github.com/agrueneberg/S3DB-Connectivity/master/s3db-connectivity.js');
+document.head.appendChild(ScriptNode);
 
 
 var ScriptNode=document.createElement('script');
@@ -56,6 +26,8 @@ var css = document.createElement('link');
 css.setAttribute('rel', 'stylesheet');
 css.setAttribute('href', 'https://dl.dropbox.com/u/79021836/library/bootstrap/css/bootstrap.css');
 document.head.appendChild(css);
+
+
 
 
 
@@ -87,13 +59,16 @@ window.setTimeout(function(){startProcess(lookUpTree);},5000);
 
 
 function startProcess(lookUpTree){
-
-    var currentWin=this;
- 
+    
+     
+   s3dbc.setJSONP(false);
+     
+  
+     var currentWin=this;
     getAllDiseaseTypes();
     window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDiseaseTypes);},20000);
  
- 
+     
  
     function processingDiseaseType(lookUpTree,allDiseaseTypes){
  	  console.log(allDiseaseTypes.length);
@@ -204,126 +179,176 @@ function startProcess(lookUpTree){
     		    	
     		}
     	}
-        window.setTimeout(function(){fillBarcodeHasClinicalData(allDiseaseTypes,lookUpTree);},20000);
+        window.setTimeout(function(){sendPidHavingClinicalData2S3DB(allDiseaseTypes,lookUpTree);},20000);
     }
  
    
    
    
    
-   
+      
   function fillBarcodeHasClinicalData(allDiseases,lookUpTree){
-  	
-  		var q=async.queue(function (task, callback) {
-  			
-  			 
-  	   
-  	                    
-  	                           
-  	                      TCGA.get(task.url, function(error,data){
-  	                      	          
-  	                                         	console.log(error);
-  	                                         	
-  	                                         	lookUpTree[allDiseases[task.idx_i]]['clin']['url_barcode_map'].push(task.url);
-  	                                          	var cuurentTbl=splitTbl2Array(data,false);
-  	                                            var currentColNames=cuurentTbl[0];
-  	    
-    	   
-  	                                         	for(var idx=1; idx<cuurentTbl.length; idx++){
-  	   	
-  	                                          		if(idx==cuurentTbl.length){
-  	                                         			break;
-                                             	   		}
-  	 
-  	   	                                          var tcga_barcodes=new Array();
-  	   	                                          tcga_barcodes[idx-1]=cuurentTbl[idx][currentColNames.indexOf(task.resultColname)];
-  	   		                                      lookUpTree[allDiseases[task.idx_i]]['clin']['url_barcode_map'].push(tcga_barcodes);
-  	   		                                     }
-  	   		                             window.setTimeout(function(){ callback();},5000);        
-  	   		                         
-  	   	                  });
+    
+        var q=async.queue(function (task, callback) {
+            
+             
+       
+                        
+                               
+                          TCGA.get(task.url, function(error,data){
+                                      
+                                                console.log(error);
+                                                
+                                                lookUpTree[allDiseases[task.idx_i]]['clin']['url_barcode_map'].push(task.url);
+                                                var cuurentTbl=splitTbl2Array(data,false);
+                                                var currentColNames=cuurentTbl[0];
+        
+           
+                                                for(var idx=1; idx<cuurentTbl.length; idx++){
+        
+                                                    if(idx==cuurentTbl.length){
+                                                        break;
+                                                        }
+     
+                                                  var tcga_barcodes=new Array();
+                                                  tcga_barcodes[idx-1]=cuurentTbl[idx][currentColNames.indexOf(task.resultColname)];
+                                                  lookUpTree[allDiseases[task.idx_i]]['clin']['url_barcode_map'].push(tcga_barcodes);
+                                                 }
+                                         window.setTimeout(function(){ callback();},5000);        
+                                     
+                          });
 
-  			
-  	     
-  		},1);
-  	
-  	
-  	var queueArray=[ ];
-	for(var i=0; i<allDiseases.length ; i++){
-    		
-    		if(i==allDiseases.length){
-    			break;
-    		}
-    		
-    		
-    		var numOfDataTypes=lookUpTree[allDiseases[i]]['dataType'].length;
-    		
-    		for(var j=0;j<numOfDataTypes ;j++){
-    			
-    			
-    			if(j==numOfDataTypes){
-    				 break;
-    			}
-    			
-    		    if(lookUpTree[allDiseases[i]]['dataType'][j].match(/clin/)){
-    		      
-    		    	var aDisease=new Disease(allDiseases[i]);
-    		    	lookUpTree[allDiseases[i]]['clin']['url_barcode_map']=new Array();
-    		    	
-    		    	var totLen=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'].length;   		    	
-    		    	var start=totLen/2;
-    		    	for(var k=start;k<totLen;k++){
-    		    		
-    		    		if(k==totLen){
-    		    			break;
-    		    		}
-    		    		
-    		    		
-    		    		var subDataTypes=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][k];
-    		    		if(subDataTypes.indexOf("bcr_sample_barcode")> -1){
-    		    			
-    		    			var urlIndex=k-totLen/2;
-    		    			var currentURL=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][urlIndex];
-    		    			
-    		    		     queueArray= queueArray.concat({idx_i:i,url:currentURL,resultColname:"bcr_sample_barcode"});
-    		    		}
-    		    		
-    		    				
-    		    	    if(subDataTypes.indexOf("bcr_patient_barcode")> -1){
-    		    			
-    		    			var urlIndex=k-totLen/2;
-    		    			var currentURL=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][urlIndex];
-    		    			 
-    		    			 queueArray= queueArray.concat({idx_i:i,url:currentURL,resultColname:"bcr_patient_barcode"});
-    		    		   
-    		    		}
-    		    		
-    		    	}
-    		    	
-    		    }	
-    			
-    			
-    		}
-    		
-    	}
-    	
-    	
-    	  q.drain = function() { console.log('all items have been processed'); }
-    	  
- 		  q.push(queueArray, function (err) {
- 		  	
- 		  });
+            
+         
+        },1);
+    
+    
+    var queueArray=[ ];
+    for(var i=0; i<allDiseases.length ; i++){
+            
+            if(i==allDiseases.length){
+                break;
+            }
+            
+            
+            var numOfDataTypes=lookUpTree[allDiseases[i]]['dataType'].length;
+            
+            for(var j=0;j<numOfDataTypes ;j++){
+                
+                
+                if(j==numOfDataTypes){
+                     break;
+                }
+                
+                if(lookUpTree[allDiseases[i]]['dataType'][j].match(/clin/)){
+                  
+                    var aDisease=new Disease(allDiseases[i]);
+                    lookUpTree[allDiseases[i]]['clin']['url_barcode_map']=new Array();
+                    
+                    var totLen=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'].length;                   
+                    var start=totLen/2;
+                    for(var k=start;k<totLen;k++){
+                        
+                        if(k==totLen){
+                            break;
+                        }
+                        
+                        
+                        var subDataTypes=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][k];
+                        if(subDataTypes.indexOf("bcr_sample_barcode")> -1){
+                            
+                            var urlIndex=k-totLen/2;
+                            var currentURL=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][urlIndex];
+                            
+                             queueArray= queueArray.concat({idx_i:i,url:currentURL,resultColname:"bcr_sample_barcode"});
+                        }
+                        
+                     
+                    }
+                    
+                }   
+                
+                
+            }
+            
+        }
+        
+        
+          q.drain = function() { console.log('all items have been processed'); }
+          
+          q.push(queueArray, function (err) {
+            
+          });
    }
 
  
- 
- 
    	
    	
+   	function sendPidHavingClinicalData2S3DB(allDiseases,lookUpTree){
+   	    
+   	    for(var i=0; i<allDiseases.length;i++){
+   	         (function(i){
+   	             var totLen=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'].length;                   
+                 var start=totLen/2;
+   	             for(var k=start;k<totLen;k++){
+   	                 (function(k){
+   	                    var subDataTypes=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][k];
+                        if(subDataTypes.indexOf("bcr_sample_barcode")> -1){
+                            
+                            var urlIndex=k-totLen/2;
+                            var currentURL=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][urlIndex];
+                            TCGA.get(currentURL,function(error,data){
+                                        //console.log(error);
+                                                
+                                         var cuurentTbl=splitTbl2Array(data,false);
+                                         var currentColNames=cuurentTbl[0];
+                                       //  console.log(currentColNames);
+                                         var currentColIdx=currentColNames.indexOf("bcr_sample_barcode");
+                                           //  console.log(currentColIdx);
+                                              if(currentColIdx>-1){
+                                                for(var idx=1; idx<cuurentTbl.length; idx++){
+                                                    
+                                                   (function(idx){
+                                                             
+                                                               window.setTimeout(function(){sendPID(cuurentTbl,idx,currentColIdx,patient_collection_id);},7000);
+                                     
+                                                         }     
+                                                   (idx));   
+                                                  }
+                                               
+                                                    
+                                         
+                                                 }
+                            });
+                            
+                            
+                        }
+   	                 }(k));
+   	                     
+   	                 
+   	             }
+   	             
+   	         }(i));
+   	    }
+   	   
+   	}
    	
    	
-   	
-   	
+   	function sendPID(cuurentTbl,idx,currentColIdx,patient_collection_id){
+   	      s3dbc.setDeployment(deployment);
+   	     s3dbc.login(username, password, function (err, key) {
+                                                            if (err !== null) {
+                                                               console.log("Login failed.", err);
+                                                            } 
+                                                                    
+                                                            else {
+                                                                s3dbc.setKey(key);
+                                                                s3dbc.setJSONP(false);
+                                                               // console.log (cuurentTbl[idx][currentColIdx]);
+                                                                s3dbc.insertItem(patient_collection_id,cuurentTbl[idx][currentColIdx], function(err, results){});
+                                                            }
+                                                          });      
+   	}
    	
    	
    

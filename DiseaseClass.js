@@ -120,6 +120,7 @@ Disease.prototype.send2Server=function(lookUpTree,serverURL){
     
     var formContainer=document.createElement('form');
     formContainer.setAttribute('id','d4sumbit');
+    formContainer.setAttribute('target','_blank');
     formContainer.setAttribute('formaction',serverURL);
     for(var index=0; index<allKeyNames.length; index++){
     	 var unitContainer={};
@@ -168,7 +169,7 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
                            
         var sparql_query=sparql_template.join(" ");
                                                                               
-        TCGA.hub.query(sparql_query,function(error,data){console.log(error); that.patientsOfImageData=queryResultObj2Array(data,1);that.urls4PatientsOfImageData=queryResultObj2Array(data,2)});
+        TCGA.find(sparql_query,function(error,data){console.log(error); that.patientsOfImageData=queryResultObj2Array(data,1);that.urls4PatientsOfImageData=queryResultObj2Array(data,2)});
         
         //result is an array where every element is a type of biomedical data
       
@@ -198,7 +199,7 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
                            
         var sparql_query=sparql_template.join(" ");
                                                                                 
-        TCGA.hub.query(sparql_query,function(error,data){console.log(error);that.urlsOfClinicalDataSets=queryResultObj2Array(data,0);});
+        TCGA.find(sparql_query,function(error,data){console.log(error);that.urlsOfClinicalDataSets=queryResultObj2Array(data,0);});
         
         //result is an array where every element is a type of biomedical data
   };
@@ -227,7 +228,7 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
                            
         var sparql_query=sparql_template.join(" ");
                                                                                 
-        TCGA.hub.query(sparql_query,function(error,data){
+        TCGA.find(sparql_query,function(error,data){
                                                            console.log(error);
                                                            that.urlsOfClinicalDataSets=data.results.bindings.map(function (obj) { return obj.url.value; });;
                                                            lookUpTree[allDiseases[i]]['clin']['url']=that.urlsOfClinicalDataSets;
@@ -294,7 +295,7 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
                            ];
                            
         var sparql_query=sparql_template.join(" ");                       // note :this refers to the windows
-        TCGA.hub.query(sparql_query,function(error,data){console.log(error);that.dataTypes= queryResultObj2Array(data,0);});
+        TCGA.find(sparql_query,function(error,data){console.log(error);that.dataTypes= queryResultObj2Array(data,0);});
    
         
         
@@ -325,7 +326,7 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
                            ];
                            
         var sparql_query=sparql_template.join(" ");                       
-        TCGA.hub.query(sparql_query,function(error,data){
+        TCGA.find(sparql_query,function(error,data){
         	                                              console.log(error);
         	                                              //that.dataTypes= queryResultObj2Array(data.results.bindings.map(function (obj) { return obj.type.value; }),0);
         	                                              that.dataTypes=data.results.bindings.map(function (obj) { return obj.type.value; });
@@ -426,7 +427,7 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
                            ];
                            
         var sparql_query=sparql_template.join(" ");                      
-        TCGA.hub.query(sparql_query,function(error,data){
+        TCGA.find(sparql_query,function(error,data){
         	console.log(error);
         	that.allDiseaseTypes=data.results.bindings.map(function (obj) { return obj.diseaseType.value; });
         	
