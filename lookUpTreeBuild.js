@@ -1,4 +1,6 @@
 var patient_collection_id='457';
+var project_ID='566';
+var subject_ID='457';
 var deployment= "https://uab.s3db.org/s3db";
 var username = "shukai";
 var password = "12345"; 
@@ -310,8 +312,8 @@ function startProcess(lookUpTree){
                                                     
                                                    (function(idx){
                                                              
-                                                               window.setTimeout(function(){sendPID(cuurentTbl,idx,currentColIdx,patient_collection_id);},7000);
-                                     
+                                                               window.setTimeout(function(){sendPIDWithClnicalInfo(cuurentTbl,idx,currentColIdx,patient_collection_id);},7000);
+                                                               
                                                          }     
                                                    (idx));   
                                                   }
@@ -334,8 +336,8 @@ function startProcess(lookUpTree){
    	}
    	
    	
-   	function sendPID(cuurentTbl,idx,currentColIdx,patient_collection_id){
-   	      s3dbc.setDeployment(deployment);
+   	function sendPIDWithClnicalInfo(cuurentTbl,idx,currentColIdx,patient_collection_id){
+   	     s3dbc.setDeployment(deployment);
    	     s3dbc.login(username, password, function (err, key) {
                                                             if (err !== null) {
                                                                console.log("Login failed.", err);
@@ -346,12 +348,41 @@ function startProcess(lookUpTree){
                                                                 s3dbc.setJSONP(false);
                                                                // console.log (cuurentTbl[idx][currentColIdx]);
                                                                 s3dbc.insertItem(patient_collection_id,cuurentTbl[idx][currentColIdx], function(err, results){});
+                                                                var prefix='<S3QL><insert>rule</insert><where>';                                                            
+                                                                var suffix='<verb>has</verb</where></S3QL>';
+                                                                var s3qul_buildRules=prefix+'<project_id>'+project_ID+'</project_id>'+'<subject_id>'+subject_ID+'</subject_id>'+suffix;
+                                                                s3dbc.s3qlQuery(s3qul_buildRules , function(err,  results){
+                                                                      console.log(err);
+                                                                } );
+                                                              
                                                             }
                                                           });      
    	}
    	
    	
+   	
    
+   	
+   function  builS3DBdRules(rule){
+       s3dbc.setDeployment(deployment);
+       s3dbc.login(username, password, function (err, key) {
+                                                            if (err !== null) {
+                                                               console.log("Login failed.", err);
+                                                            } 
+                                                                    
+                                                            else {
+                                                                s3dbc.setKey(key);
+                                                                s3dbc.setJSONP(false);
+                                                                var prefix='<S3QL><insert>rule</insert><where>';                                                            
+                                                                var suffix='<verb>has</verb</where></S3QL>';
+                                                                var s3qul_buildRules=prefix+'<project_id>'+project_ID+'</project_id>'+'<subject_id>'+subject_ID+'</subject_id>'+'<object>'+'</object>'+suffix;
+                                                                s3dbc.s3qlQuery(s3qul_buildRules , function(err,  results){
+                                                                      console.log(err);
+                                                                } );
+                                                              
+                                                            }
+                                                          });     
+   }
   
    
     
