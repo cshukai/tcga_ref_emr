@@ -305,9 +305,24 @@ function startProcess(lookUpTree){
                                          var cuurentTbl=splitTbl2Array(data,false);
                                          var currentColNames=cuurentTbl[0];
                                        //  console.log(currentColNames);
+                                       
+                                   
+                                       
                                          var currentColIdx=currentColNames.indexOf("bcr_sample_barcode");
                                            //  console.log(currentColIdx);
                                               if(currentColIdx>-1){
+                                                  
+                                                for(var index=0;index<currentColNames.length;index++){
+                                                    (function(index){
+                                                        if(index!=currentColIdx){
+                                                           window.setTimeout(function(){builS3DBdRules(currentColNames[index]);},15000);    
+                                                        }
+                                                             
+                                                    }(index))
+                                                   
+                                                }  
+                                                  
+                                                  
                                                 for(var idx=1; idx<cuurentTbl.length; idx++){
                                                     
                                                    (function(idx){
@@ -348,12 +363,6 @@ function startProcess(lookUpTree){
                                                                 s3dbc.setJSONP(false);
                                                                // console.log (cuurentTbl[idx][currentColIdx]);
                                                                 s3dbc.insertItem(patient_collection_id,cuurentTbl[idx][currentColIdx], function(err, results){});
-                                                                var prefix='<S3QL><insert>rule</insert><where>';                                                            
-                                                                var suffix='<verb>has</verb</where></S3QL>';
-                                                                var s3qul_buildRules=prefix+'<project_id>'+project_ID+'</project_id>'+'<subject_id>'+subject_ID+'</subject_id>'+suffix;
-                                                                s3dbc.s3qlQuery(s3qul_buildRules , function(err,  results){
-                                                                      console.log(err);
-                                                                } );
                                                               
                                                             }
                                                           });      
@@ -363,7 +372,7 @@ function startProcess(lookUpTree){
    	
    
    	
-   function  builS3DBdRules(rule){
+   function  builS3DBdRules(ruleObject){
        s3dbc.setDeployment(deployment);
        s3dbc.login(username, password, function (err, key) {
                                                             if (err !== null) {
@@ -374,9 +383,10 @@ function startProcess(lookUpTree){
                                                                 s3dbc.setKey(key);
                                                                 s3dbc.setJSONP(false);
                                                                 var prefix='<S3QL><insert>rule</insert><where>';                                                            
-                                                                var suffix='<verb>has</verb</where></S3QL>';
-                                                                var s3qul_buildRules=prefix+'<project_id>'+project_ID+'</project_id>'+'<subject_id>'+subject_ID+'</subject_id>'+'<object>'+'</object>'+suffix;
-                                                                s3dbc.s3qlQuery(s3qul_buildRules , function(err,  results){
+                                                                var suffix='</where></S3QL>';
+                                                                var s3ql_buildRules=prefix+'<project_id>'+project_ID+'</project_id>'+'<subject_id>'+subject_ID+'</subject_id>'+'<verb>has</verb>'+'<object>'+ruleObject+'</object>'+suffix;
+                                                               // console.log(s3ql_buildRules);
+                                                                s3dbc.s3qlQuery(s3ql_buildRules , function(err,  results){
                                                                       console.log(err);
                                                                 } );
                                                               
