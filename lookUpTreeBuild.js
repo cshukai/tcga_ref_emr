@@ -1,6 +1,6 @@
 var sparql_end_point='http://agalpha.mathbiol.org/repositories/tcga_ref_emr';
 
-
+ 
 
 
 
@@ -18,13 +18,13 @@ var sparql_end_point='http://agalpha.mathbiol.org/repositories/tcga_ref_emr';
                            ];
                            
        var sparql_query=sparql_template.join(" ");
-       console.log(sparql_query);
+      // console.log(sparql_query);
        var queryString=encodeURIComponent(sparql_query);
-       console.log(queryString);
+       //console.log(queryString);
       // var url=sparql_end_point+'?query='+queryString;
       // console.log(url);
        
-       $.post(sparql_end_point, "query="+queryString, function (data) { console.log(data); });
+       $.post(sparql_end_point, "query="+queryString, function (data) { }).error(function() {console.log(sparql_query); });
        
        // TCGA.get.sparql(url, function(error,data){
              // console.log(error);
@@ -209,7 +209,7 @@ function startProcess(lookUpTree){
     		    	
     		}
     	}
-        window.setTimeout(function(){sendPidHavingClinicalData2S3DB(allDiseaseTypes,lookUpTree);},20000);
+        window.setTimeout(function(){sendPidClinicalData2Alle(allDiseaseTypes,lookUpTree);},20000);
     }
  
    
@@ -345,24 +345,41 @@ function startProcess(lookUpTree){
                                               if(currentColIdx>-1){
                                                   
                                 
-                                                  
-                                                for(var idx=1; idx<cuurentTbl.length; idx++){
-                                                    
-                                                   (function(idx){
-                                                             
-                                                         //    window.setTimeout(function(){sendPIDWithClnicalInfo(cuurentTbl,idx,currentColIdx,patient_collection_id);},7000);
+                                                     for(var index=1;index<cuurentTbl.length;index++){
+                                                        (function(index){
+                                                           for(idx=0;idx<currentColNames.length;idx++){
+                                                               (function(idx){
+                                                                  if(idx!=currentColIdx){
+                                                                      if(cuurentTbl[index][idx]===undefined){
+                                                                          
+                                                                      }
+                                                                      
+                                                                      else{
+                                                                          
+                                                                          
+                                                                           window.setTimeout(function(){
+                                                                          
+                                                                              insertSparqully(cuurentTbl[index][currentColIdx],currentColNames[idx],cuurentTbl[index][idx],sparql_end_point);    
+                                                                          
+                                                                           },30000);
+                                                                          
+                                                                      }
+                                                         
+                                                                   }          
+                                                               }(idx));
+                                                         
                                                                
-                                                         }     
-                                                   (idx));   
-                                                  }
-                                               
-                                                    
-                                         
+                                                           }
+                                                       
+                                                             
+                                                         }(index));
+                                          
                                                  }
-                            });
+                            }
                             
                             
-                        }
+                        });
+                       }
                      }(k));
                          
                      
@@ -372,10 +389,6 @@ function startProcess(lookUpTree){
         }
        
     }
-   	
-   	
-   	
-   	
    	
    	
    	
@@ -424,7 +437,7 @@ function startProcess(lookUpTree){
                                                     
                                                    (function(idx){
                                                              
-                                                         //    window.setTimeout(function(){sendPIDWithClnicalInfo(cuurentTbl,idx,currentColIdx,patient_collection_id);},7000);
+                                                            window.setTimeout(function(){sendPIDWithClnicalInfo(cuurentTbl,idx,currentColIdx,patient_collection_id);},7000);
                                                                
                                                          }     
                                                    (idx));   
