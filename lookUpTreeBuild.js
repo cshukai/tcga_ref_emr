@@ -1,10 +1,38 @@
-var patient_collection_id='457';
-var project_ID='566';
-var subject_ID='457';
-var deployment= "https://uab.s3db.org/s3db";
-var username = "shukai";
-var password = "12345"; 
+var sparql_end_point='http://agalpha.mathbiol.org/repositories/tcga_ref_emr';
 
+
+
+
+
+  var insertSparqully=function(sub,pred,obj,sparql_end_point){
+       var that=this;
+       var sub_url='<http://example/'+sub+'>';
+       var pred_url='<http://example/'+pred+'>';
+       var obj_url='<http://example/'+obj+'>';
+       
+       var sparql_template= [ 
+                           "insert data {",
+                             //"\'"+sub+"\'"+" "+"\'"+pred+"\'"+" "+"\'"+obj+"\'"+" .",
+                             sub_url+" "+pred_url+" "+obj_url+" .",
+                             "}"
+                           ];
+                           
+       var sparql_query=sparql_template.join(" ");
+       console.log(sparql_query);
+       var queryString=encodeURIComponent(sparql_query);
+       console.log(queryString);
+      // var url=sparql_end_point+'?query='+queryString;
+      // console.log(url);
+       
+       $.post(sparql_end_point, "query="+queryString, function (data) { console.log(data); });
+       
+       // TCGA.get.sparql(url, function(error,data){
+             // console.log(error);
+       // });
+       
+                           
+                           
+  };
 
 
 var ScriptNode=document.createElement('script');
@@ -286,6 +314,75 @@ function startProcess(lookUpTree){
  
    	
    	
+   	
+   	
+   	
+   	
+   	    function sendPidClinicalData2Alle(allDiseases,lookUpTree){
+        
+        for(var i=0; i<allDiseases.length;i++){
+             (function(i){
+                 var totLen=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'].length;                   
+                 var start=totLen/2;
+                 for(var k=start;k<totLen;k++){
+                     (function(k){
+                        var subDataTypes=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][k];
+                        if(subDataTypes.indexOf("bcr_sample_barcode")> -1){
+                            
+                            var urlIndex=k-totLen/2;
+                            var currentURL=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][urlIndex];
+                            TCGA.get(currentURL,function(error,data){
+                                        //console.log(error);
+                                                
+                                         var cuurentTbl=splitTbl2Array(data,false);
+                                         var currentColNames=cuurentTbl[0];
+                                       //  console.log(currentColNames);
+                                       
+                                   
+                                       
+                                         var currentColIdx=currentColNames.indexOf("bcr_sample_barcode");
+                                           //  console.log(currentColIdx);
+                                              if(currentColIdx>-1){
+                                                  
+                                
+                                                  
+                                                for(var idx=1; idx<cuurentTbl.length; idx++){
+                                                    
+                                                   (function(idx){
+                                                             
+                                                         //    window.setTimeout(function(){sendPIDWithClnicalInfo(cuurentTbl,idx,currentColIdx,patient_collection_id);},7000);
+                                                               
+                                                         }     
+                                                   (idx));   
+                                                  }
+                                               
+                                                    
+                                         
+                                                 }
+                            });
+                            
+                            
+                        }
+                     }(k));
+                         
+                     
+                 }
+                 
+             }(i));
+        }
+       
+    }
+   	
+   	
+   	
+   	
+   	
+   	
+   	
+   	
+   	
+   	
+   	
    	function sendPidHavingClinicalData2S3DB(allDiseases,lookUpTree){
    	    
    	    for(var i=0; i<allDiseases.length;i++){
@@ -327,7 +424,7 @@ function startProcess(lookUpTree){
                                                     
                                                    (function(idx){
                                                              
-                                                               window.setTimeout(function(){sendPIDWithClnicalInfo(cuurentTbl,idx,currentColIdx,patient_collection_id);},7000);
+                                                         //    window.setTimeout(function(){sendPIDWithClnicalInfo(cuurentTbl,idx,currentColIdx,patient_collection_id);},7000);
                                                                
                                                          }     
                                                    (idx));   
@@ -387,7 +484,7 @@ function startProcess(lookUpTree){
                                                                 var s3ql_buildRules=prefix+'<project_id>'+project_ID+'</project_id>'+'<subject_id>'+subject_ID+'</subject_id>'+'<verb>has</verb>'+'<object>'+ruleObject+'</object>'+suffix;
                                                                // console.log(s3ql_buildRules);
                                                                 s3dbc.s3qlQuery(s3ql_buildRules , function(err,  results){
-                                                                      console.log(err);
+                                                                      //console.log(err);
                                                                 } );
                                                               
                                                             }
