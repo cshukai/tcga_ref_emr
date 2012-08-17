@@ -1,4 +1,4 @@
-var sparql_end_point='http://agalpha.mathbiol.org/repositories/tcga_ref_emr_2';
+var sparql_end_point='http://agalpha.mathbiol.org/repositories/tcga_ref_emr';
 
  
 var escapeSpecialCharacter=function(d){
@@ -212,7 +212,7 @@ function startProcess(lookUpTree){
     		    	
     		}
     	}
-        window.setTimeout(function(){sendPidClinicalData2Alle(allDiseaseTypes,lookUpTree);},40000);
+        window.setTimeout(function(){sendPidClinicalData2Alle(allDiseaseTypes,lookUpTree);},5000);
     }
  
    
@@ -324,11 +324,20 @@ function startProcess(lookUpTree){
    	    function sendPidClinicalData2Alle(allDiseases,lookUpTree){
         
         
-         // var q = async.queue(function (task, callback) {
-             // console.log('hello ' + task.name);
-             // console.log('here'+task.test);
-             // callback();
-             // }, 1);
+         var q = async.queue(function (task, callback) {
+             if(task.value!=undefined){
+                 insertSparqully(task.pid,task.attr,task.value,sparql_end_point);    
+             }
+             
+              window.setTimeout(function(){ callback();},5000);   
+             }, 1);
+        
+        
+             q.drain = function() {
+                console.log('all items have been processed');
+             }
+        
+        
         
         
         for(var i=0; i<allDiseases.length;i++){
@@ -366,20 +375,9 @@ function startProcess(lookUpTree){
                                                            for(idx=0;idx<currentColNames.length;idx++){
                                                                (function(idx){
                                                                   if(idx!=currentColIdx){
-                                                                      if(cuurentTbl[index][idx]==undefined){
-                                                                          
-                                                                      }
-                                                                      
-                                                                      else{
-                                                                          
-                                                                          
-                                                                           window.setTimeout(function(){
-                                                                          
-                                                                              insertSparqully(cuurentTbl[index][currentColIdx],currentColNames[idx],cuurentTbl[index][idx],sparql_end_point);    
-                                                                          
-                                                                           },5000);
-                                                                          
-                                                                      }
+                                                       
+                                                                        q.push({pid:cuurentTbl[index][currentColIdx],attr:currentColNames[idx],value:cuurentTbl[index][idx]});
+                                                         
                                                          
                                                                    }          
                                                                }(idx));
@@ -398,7 +396,7 @@ function startProcess(lookUpTree){
                                 
                                 
                                 
-                            },60000);
+                            },5000);
                  
                        }
                      }(k));
