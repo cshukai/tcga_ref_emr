@@ -1,14 +1,17 @@
-var sparql_end_point='http://agalpha.mathbiol.org/repositories/tcga_ref_emr';
+var sparql_end_point='http://agalpha.mathbiol.org/repositories/tcga_ref_emr_2';
 
  
-
+var escapeSpecialCharacter=function(d){
+   var d_1=d.replace(/ /g,"_");
+    return(d_1);
+} 
 
 
   var insertSparqully=function(sub,pred,obj,sparql_end_point){
        var that=this;
-       var sub_url='<http://example/'+sub+'>';
-       var pred_url='<http://example/'+pred+'>';
-       var obj_url='<http://example/'+obj+'>';
+       var sub_url='<http://example/'+escapeSpecialCharacter(sub)+'>';
+       var pred_url='<http://example/'+escapeSpecialCharacter(pred)+'>';
+       var obj_url='<http://example/'+escapeSpecialCharacter(obj)+'>';
        
        var sparql_template= [ 
                            "insert data {",
@@ -209,7 +212,7 @@ function startProcess(lookUpTree){
     		    	
     		}
     	}
-        window.setTimeout(function(){sendPidClinicalData2Alle(allDiseaseTypes,lookUpTree);},20000);
+        window.setTimeout(function(){sendPidClinicalData2Alle(allDiseaseTypes,lookUpTree);},40000);
     }
  
    
@@ -320,6 +323,14 @@ function startProcess(lookUpTree){
    	
    	    function sendPidClinicalData2Alle(allDiseases,lookUpTree){
         
+        
+         // var q = async.queue(function (task, callback) {
+             // console.log('hello ' + task.name);
+             // console.log('here'+task.test);
+             // callback();
+             // }, 1);
+        
+        
         for(var i=0; i<allDiseases.length;i++){
              (function(i){
                  var totLen=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'].length;                   
@@ -331,7 +342,11 @@ function startProcess(lookUpTree){
                             
                             var urlIndex=k-totLen/2;
                             var currentURL=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][urlIndex];
-                            TCGA.get(currentURL,function(error,data){
+                            
+                            window.setTimeout(function(){
+                                
+                                
+                                                                   TCGA.get(currentURL,function(error,data){
                                         //console.log(error);
                                                 
                                          var cuurentTbl=splitTbl2Array(data,false);
@@ -346,11 +361,12 @@ function startProcess(lookUpTree){
                                                   
                                 
                                                      for(var index=1;index<cuurentTbl.length;index++){
+                                                         
                                                         (function(index){
                                                            for(idx=0;idx<currentColNames.length;idx++){
                                                                (function(idx){
                                                                   if(idx!=currentColIdx){
-                                                                      if(cuurentTbl[index][idx]===undefined){
+                                                                      if(cuurentTbl[index][idx]==undefined){
                                                                           
                                                                       }
                                                                       
@@ -361,7 +377,7 @@ function startProcess(lookUpTree){
                                                                           
                                                                               insertSparqully(cuurentTbl[index][currentColIdx],currentColNames[idx],cuurentTbl[index][idx],sparql_end_point);    
                                                                           
-                                                                           },30000);
+                                                                           },5000);
                                                                           
                                                                       }
                                                          
@@ -379,6 +395,11 @@ function startProcess(lookUpTree){
                             
                             
                         });
+                                
+                                
+                                
+                            },60000);
+                 
                        }
                      }(k));
                          
