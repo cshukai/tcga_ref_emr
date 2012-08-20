@@ -212,7 +212,7 @@ function startProcess(lookUpTree){
     		    	
     		}
     	}
-        window.setTimeout(function(){sendPidClinicalData2Alle(allDiseaseTypes,lookUpTree);},5000);
+        window.setTimeout(function(){sendPidClinicalData2Alle(allDiseaseTypes,lookUpTree);},3000);
     }
  
    
@@ -329,7 +329,7 @@ function startProcess(lookUpTree){
                  insertSparqully(task.pid,task.attr,task.value,sparql_end_point);    
              }
              
-              window.setTimeout(function(){ callback();},5000);   
+              window.setTimeout(function(){ callback();},100);   
              }, 1);
         
         
