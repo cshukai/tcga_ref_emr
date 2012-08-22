@@ -329,7 +329,7 @@ function startProcess(lookUpTree){
                  insertSparqully(task.pid,task.attr,task.value,sparql_end_point);    
              }
              
-              window.setTimeout(function(){ callback();},100);   
+              window.setTimeout(function(){ callback();},50);   
              }, 1);
         
         
