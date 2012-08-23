@@ -11,29 +11,33 @@ document.head.appendChild(ScriptNode);
 
 
 
-$(document).ready(function() {
-     
-     
-     var  pidInput=document.createElement('input');
+var css = document.createElement('link');
+css.setAttribute('rel', 'stylesheet');
+css.setAttribute('href', 'https://dl.dropbox.com/u/79021836/TCGA_Ref_EMR/query_interface.css');
+document.head.appendChild(css);
+
+
+
+
+
+
+var pidDiv=document.createElement('div');
+pidDiv.setAttribute('id','pidArea');
+document.body.appendChild(pidDiv);
+
+
+
+ var  pidInput=document.createElement('input');
+
      pidInput.setAttribute('type','text');
      pidInput.setAttribute('id','pidInput');
-     template_div_node.appendChild(pidInput);
 
+     pidDiv.appendChild(pidInput);
      
-         
-     $('#main').position({
-         of:$('body'),
-         my:'center',
-         at:'center'
-         
-     });
-    
-    
-      $('#pidInput').position({
-           of: $('#main'),
-           my:'center',
-           at:'center'
-        });    
-    
-});
 
+
+
+var ScriptNode=document.createElement('script');
+ScriptNode.setAttribute('type','text/javascript');
+ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/TCGA_Ref_EMR/query_interaction.js');
+document.head.appendChild(ScriptNode);
