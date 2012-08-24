@@ -10,7 +10,7 @@ $(document).ready(function() {
               of: $('#pidArea'),
              my:'center top',
              at:'center center'
-         });
+           });
       
       
    
