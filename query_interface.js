@@ -15,7 +15,7 @@ if(document.getElementById('pidArea')!=null){
 
 var ScriptNode=document.createElement('script');
 ScriptNode.setAttribute('type','text/javascript');
-ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/jQueryUI/jquery-ui.min.js');
+ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/library/layout/jquery-ui-1.8.23.custom/js/jquery-ui-1.8.23.custom.min.js');
 document.head.appendChild(ScriptNode);
 
 
@@ -23,6 +23,13 @@ var ScriptNode=document.createElement('script');
 ScriptNode.setAttribute('type','text/javascript');
 ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/cross_platform/twitter_bootstrap/js/bootstrap.min.js');
 document.head.appendChild(ScriptNode);
+
+
+var css = document.createElement('link');
+css.setAttribute('rel', 'stylesheet');
+css.setAttribute('href', 'https://dl.dropbox.com/u/79021836/library/layout/jquery-ui-1.8.23.custom/css/smoothness/jquery-ui-1.8.23.custom.css');
+document.head.appendChild(css);
+
 
 
 var css = document.createElement('link');
