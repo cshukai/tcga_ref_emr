@@ -137,7 +137,7 @@ function startProcess(lookUpTree){
   	   aDisease.getDataTypeByDisease(lookUpTree);
 
     }
-    window.setTimeout(function(){fillUrlsGivenDataType(allDiseaseTypes,lookUpTree);},10000);
+    window.setTimeout(function(){fillUrlsGivenDataType(allDiseaseTypes,lookUpTree);},20000);
   }
  
   function fillUrlsGivenDataType(allDiseaseTypes,lookUpTree){
@@ -176,7 +176,7 @@ function startProcess(lookUpTree){
     		    	
     		}
     	}    	
-    	 window.setTimeout(function(){fillSubDataTypeGivenDataType(allDiseaseTypes,lookUpTree);},10000);
+    	 window.setTimeout(function(){fillSubDataTypeGivenDataType(allDiseaseTypes,lookUpTree);},20000);
     }
     
     
@@ -212,114 +212,10 @@ function startProcess(lookUpTree){
     		    	
     		}
     	}
-        window.setTimeout(function(){sendPidClinicalData2Alle(allDiseaseTypes,lookUpTree);},3000);
+        window.setTimeout(function(){sendPidClinicalData2Alle(allDiseaseTypes,lookUpTree);},7000);
     }
  
    
-   
-   
-   
-      
-  function fillBarcodeHasClinicalData(allDiseases,lookUpTree){
-    
-        var q=async.queue(function (task, callback) {
-            
-             
-       
-                        
-                               
-                          TCGA.get(task.url, function(error,data){
-                                      
-                                                console.log(error);
-                                                
-                                                lookUpTree[allDiseases[task.idx_i]]['clin']['url_barcode_map'].push(task.url);
-                                                var cuurentTbl=splitTbl2Array(data,false);
-                                                var currentColNames=cuurentTbl[0];
-        
-           
-                                                for(var idx=1; idx<cuurentTbl.length; idx++){
-        
-                                                    if(idx==cuurentTbl.length){
-                                                        break;
-                                                        }
-     
-                                                  var tcga_barcodes=new Array();
-                                                  tcga_barcodes[idx-1]=cuurentTbl[idx][currentColNames.indexOf(task.resultColname)];
-                                                  lookUpTree[allDiseases[task.idx_i]]['clin']['url_barcode_map'].push(tcga_barcodes);
-                                                 }
-                                         window.setTimeout(function(){ callback();},5000);        
-                                     
-                          });
-
-            
-         
-        },1);
-    
-    
-    var queueArray=[ ];
-    for(var i=0; i<allDiseases.length ; i++){
-            
-            if(i==allDiseases.length){
-                break;
-            }
-            
-            
-            var numOfDataTypes=lookUpTree[allDiseases[i]]['dataType'].length;
-            
-            for(var j=0;j<numOfDataTypes ;j++){
-                
-                
-                if(j==numOfDataTypes){
-                     break;
-                }
-                
-                if(lookUpTree[allDiseases[i]]['dataType'][j].match(/clin/)){
-                  
-                    var aDisease=new Disease(allDiseases[i]);
-                    lookUpTree[allDiseases[i]]['clin']['url_barcode_map']=new Array();
-                    
-                    var totLen=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'].length;                   
-                    var start=totLen/2;
-                    for(var k=start;k<totLen;k++){
-                        
-                        if(k==totLen){
-                            break;
-                        }
-                        
-                        
-                        var subDataTypes=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][k];
-                        if(subDataTypes.indexOf("bcr_sample_barcode")> -1){
-                            
-                            var urlIndex=k-totLen/2;
-                            var currentURL=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][urlIndex];
-                            
-                             queueArray= queueArray.concat({idx_i:i,url:currentURL,resultColname:"bcr_sample_barcode"});
-                        }
-                        
-                     
-                    }
-                    
-                }   
-                
-                
-            }
-            
-        }
-        
-        
-          q.drain = function() { console.log('all items have been processed'); }
-          
-          q.push(queueArray, function (err) {
-            
-          });
-   }
-
- 
-   	
-   	
-   	
-   	
-   	
    	
    	    function sendPidClinicalData2Alle(allDiseases,lookUpTree){
         

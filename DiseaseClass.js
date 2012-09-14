@@ -246,6 +246,11 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
    	                                                 
    	                                                       var that= this;
    	                                                       lookUpTree[allDiseases[i]][mainDataType]['url_colNames_map']=new Array();
+   	                                 
+   	                                 /*
+   	                                  * Uncaught TypeError: Cannot set property 'url_colNames_map' of undefined 
+   	                                  * dl.dropbox.com/u/79021836/TCGA_Ref_EMR/DiseaseClass.js:248
+   	                                  */
    	                                                          
                                                            for(var j =0; j< lookUpTree[allDiseases[i]][mainDataType]['url'].length;j++){
    	  		                                                     
@@ -304,6 +309,9 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
        }
  
  
+ 
+ 
+
  
  
    Disease.prototype.getDataTypeByDisease=function(lookUpTree){
