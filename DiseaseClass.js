@@ -1,6 +1,6 @@
 
 /*
- * conversion of data structure ___________reuseful 
+ * parsing for intended data structure 
  */
 
 
@@ -109,9 +109,8 @@ var  Disease=function(diseaseName){
     };
     
     
-    //current url :http://localhost:8080/tcga_ref_emr_backend/CatchLookUpTree
-    //Resource interpreted as Script but transferred with MIME type text/plain:
-    //"http://localhost:8080/tcga_ref_emr_backend/CatchLookUpTree?undefined=undefined&undefined=undefined&_1341597276753="
+
+//data transfer    
 Disease.prototype.send2Server=function(lookUpTree,serverURL){
     var that=this;
     that.dSet={};
@@ -144,7 +143,7 @@ Disease.prototype.send2Server=function(lookUpTree,serverURL){
 }    
     
     
-    
+// parsing for slide-image-related data    
 Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
 	      var that=this;
           var sparql_template= [ "prefix tcga:<http://purl.org/tcga/core#>",
@@ -307,11 +306,6 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
                  
          
        }
- 
- 
- 
- 
-
  
  
    Disease.prototype.getDataTypeByDisease=function(lookUpTree){

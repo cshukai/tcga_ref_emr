@@ -1,5 +1,12 @@
+// global variables
 var sparql_end_point='http://agalpha.mathbiol.org/repositories/tcga_ref_emr';
+var lookUpTree={};
+lookUpTree['disease']=new Array();
+var aDisease={};
+var currentWindow=this;
 
+
+// glbal functions
  
 var escapeSpecialCharacter=function(d){
    var d_1=d.replace(/ /g,"_");
@@ -7,7 +14,7 @@ var escapeSpecialCharacter=function(d){
 } 
 
 
-  var insertSparqully=function(sub,pred,obj,sparql_end_point){
+var insertSparqully=function(sub,pred,obj,sparql_end_point){
        var that=this;
        var sub_url='<http://example/'+escapeSpecialCharacter(sub)+'>';
        var pred_url='<http://example/'+escapeSpecialCharacter(pred)+'>';
@@ -21,23 +28,15 @@ var escapeSpecialCharacter=function(d){
                            ];
                            
        var sparql_query=sparql_template.join(" ");
-      // console.log(sparql_query);
        var queryString=encodeURIComponent(sparql_query);
-       //console.log(queryString);
-      // var url=sparql_end_point+'?query='+queryString;
-      // console.log(url);
-       
+  
        $.post(sparql_end_point, "query="+queryString, function (data) { }).error(function() {console.log(sparql_query); });
-       
-       // TCGA.get.sparql(url, function(error,data){
-             // console.log(error);
-       // });
-       
-                           
-                           
+                     
   };
 
 
+
+// dependency loading
 var ScriptNode=document.createElement('script');
 ScriptNode.setAttribute('type','text/javascript');
 ScriptNode.setAttribute('src','https://raw.github.com/agrueneberg/S3DB-Connectivity/master/s3db-connectivity.js');
@@ -64,18 +63,6 @@ document.head.appendChild(css);
 
 
 
-var lookUpTree={};
-lookUpTree['disease']=new Array();
- 
- 
- var aDisease={};
-
- var currentWindow=this;
- var extTree={};
-
-
-
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -97,23 +84,21 @@ function startProcess(lookUpTree){
    s3dbc.setJSONP(false);
      
   
-     var currentWin=this;
+    var currentWin=this;
     getAllDiseaseTypes();
-    window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDiseaseTypes);},20000);
+    window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDiseaseTypes);},30000);
  
      
  
     function processingDiseaseType(lookUpTree,allDiseaseTypes){
  	  console.log(allDiseaseTypes.length);
+
  	  for(var j=0; j<allDiseaseTypes.length; j++){
       
  	  lookUpTree['disease'].push (allDiseaseTypes[j]);	
  	  lookUpTree[allDiseaseTypes[j]]={};
  	  lookUpTree[allDiseaseTypes[j]]['dataType']=new Array();
- 	  
-     	  
- 	  
- 	   	  
+   	  
  	 }    
  	  feedDataType2BackEndTree(lookUpTree,allDiseaseTypes);
    }
@@ -176,7 +161,7 @@ function startProcess(lookUpTree){
     		    	
     		}
     	}    	
-    	 window.setTimeout(function(){fillSubDataTypeGivenDataType(allDiseaseTypes,lookUpTree);},20000);
+    	 window.setTimeout(function(){fillSubDataTypeGivenDataType(allDiseaseTypes,lookUpTree);},30000);
     }
     
     
