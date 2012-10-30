@@ -139,8 +139,15 @@ document.head.appendChild(ScriptNode);
 
 var ScriptNode=document.createElement('script');
 ScriptNode.setAttribute('type','text/javascript');
-ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/TCGA_Ref_EMR/DiseaseClass.js');
+ScriptNode.setAttribute('src','https://raw.github.com/cshukai/tcga_ref_emr/master/DiseaseClass.js');
+
 document.head.appendChild(ScriptNode);
+
+var ScriptNode=document.createElement('script');
+ScriptNode.setAttribute('type','text/javascript');
+ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/library/caolan-async-4351b56/lib/async.js');
+document.head.appendChild(ScriptNode);
+
 
 var ScriptNode=document.createElement('script');
 ScriptNode.setAttribute('type','text/javascript');
@@ -158,13 +165,12 @@ window.setTimeout(function(){startProcess(lookUpTree);},5000); // initilization
 function startProcess(lookUpTree){
     
      
-    s3dbc.setJSONP(false);
+   // s3dbc.setJSONP(false);
     var currentWin=this;
     getAllDiseaseTypes();
     window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDiseaseTypes);},30000);
  
      
- 
     function processingDiseaseType(lookUpTree,allDiseaseTypes){ // place all the disease types in lookUpTree
  	  console.log(allDiseaseTypes.length);
 
@@ -352,7 +358,7 @@ function startProcess(lookUpTree){
                                                                     
                                                             else {
                                                                 s3dbc.setKey(key);
-                                                                s3dbc.setJSONP(false);
+                                                               // s3dbc.setJSONP(false);
                                                                 s3dbc.setDeployment(deployment);
                                                                // console.log (cuurentTbl[idx][currentColIdx]);
                                                                 s3dbc.insertItem(clinical_pid_colletionID,cuurentTbl[idx][currentColIdx], function(err, results){});
@@ -374,7 +380,7 @@ function startProcess(lookUpTree){
                                                                     
                                                             else {
                                                                 s3dbc.setKey(key);
-                                                                s3dbc.setJSONP(false);
+                                                                //s3dbc.setJSONP(false);
                                                                 s3dbc.setDeployment(deployment);
                                                                 var prefix='<S3QL><insert>rule</insert><where>';                                                            
                                                                 var suffix='</where></S3QL>';
