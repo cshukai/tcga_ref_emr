@@ -353,6 +353,7 @@ function startProcess(lookUpTree){
                                                             else {
                                                                 s3dbc.setKey(key);
                                                                 s3dbc.setJSONP(false);
+                                                                s3dbc.setDeployment(deployment);
                                                                // console.log (cuurentTbl[idx][currentColIdx]);
                                                                 s3dbc.insertItem(clinical_pid_colletionID,cuurentTbl[idx][currentColIdx], function(err, results){});
                                                               
@@ -365,7 +366,7 @@ function startProcess(lookUpTree){
    
    	
    function  builS3DBdRules(ruleObject){
-       s3dbc.setDeployment(deployment);
+       
        s3dbc.login(username, password, function (err, key) {
                                                             if (err !== null) {
                                                                console.log("Login failed.", err);
@@ -374,6 +375,7 @@ function startProcess(lookUpTree){
                                                             else {
                                                                 s3dbc.setKey(key);
                                                                 s3dbc.setJSONP(false);
+                                                                s3dbc.setDeployment(deployment);
                                                                 var prefix='<S3QL><insert>rule</insert><where>';                                                            
                                                                 var suffix='</where></S3QL>';
                                                                 var s3ql_buildRules=prefix+'<project_id>'+project_ID+'</project_id>'+'<subject_id>'+subject_ID+'</subject_id>'+'<verb>has</verb>'+'<object>'+ruleObject+'</object>'+suffix;
