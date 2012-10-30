@@ -1,12 +1,12 @@
-// global variables
+////////////////////////////////////////////////// global variables////////////////////////////////////////
 var sparql_end_point='http://agalpha.mathbiol.org/repositories/tcga_ref_emr';
+var s3db_url='http://sbalpha.infopath.hs.uab.edu/s3db';
 var lookUpTree={};
 lookUpTree['disease']=new Array();
 var aDisease={};
 var currentWindow=this;
 
-
-// glbal functions
+////////////////////////////////////////////////functions for using allegrograph as backend//////////////////
  
 var escapeSpecialCharacter=function(d){
    var d_1=d.replace(/ /g,"_");
@@ -36,7 +36,7 @@ var insertSparqully=function(sub,pred,obj,sparql_end_point){
 
 
 
-// dependency loading
+///////////////////////////////////////////// dependency///////////////////////////////////////////////////////
 var ScriptNode=document.createElement('script');
 ScriptNode.setAttribute('type','text/javascript');
 ScriptNode.setAttribute('src','https://raw.github.com/agrueneberg/S3DB-Connectivity/master/s3db-connectivity.js');
@@ -53,27 +53,10 @@ ScriptNode.setAttribute('type','text/javascript');
 ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/library/caolan-async-4351b56/lib/async.js');
 document.head.appendChild(ScriptNode);
 
-
-var css = document.createElement('link');
-css.setAttribute('rel', 'stylesheet');
-css.setAttribute('href', 'https://dl.dropbox.com/u/79021836/library/bootstrap/css/bootstrap.css');
-document.head.appendChild(css);
+//////////////////////////////////////////////////////pipeline//////////////////////////////
 
 
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
- * 
- * pipeline
- * 
- */
-
-
-window.setTimeout(function(){startProcess(lookUpTree);},5000);
+window.setTimeout(function(){startProcess(lookUpTree);},5000); // initilization
 
 
 
@@ -81,16 +64,14 @@ window.setTimeout(function(){startProcess(lookUpTree);},5000);
 function startProcess(lookUpTree){
     
      
-   s3dbc.setJSONP(false);
-     
-  
+    s3dbc.setJSONP(false);
     var currentWin=this;
     getAllDiseaseTypes();
     window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDiseaseTypes);},30000);
  
      
  
-    function processingDiseaseType(lookUpTree,allDiseaseTypes){
+    function processingDiseaseType(lookUpTree,allDiseaseTypes){ // place all the disease types in lookUpTree
  	  console.log(allDiseaseTypes.length);
 
  	  for(var j=0; j<allDiseaseTypes.length; j++){
@@ -197,7 +178,7 @@ function startProcess(lookUpTree){
     		    	
     		}
     	}
-        window.setTimeout(function(){sendPidClinicalData2Alle(allDiseaseTypes,lookUpTree);},7000);
+        window.setTimeout(function(){sendPidHavingClinicalData2S3DB(allDiseaseTypes,lookUpTree);},7000);
     }
  
    
