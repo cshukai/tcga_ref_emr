@@ -4,6 +4,9 @@ var sparql_end_point='http://agalpha.mathbiol.org/repositories/tcga_ref_emr';
 var deployment='http://sbalpha.infopath.hs.uab.edu/s3db';
 var username ='shukai';
 var password='12345';
+var project_ID='96';
+var clinical_pid_colletionID='97';
+
 
 var lookUpTree={};
 lookUpTree['disease']=new Array();
@@ -273,13 +276,7 @@ function startProcess(lookUpTree){
     }
  
    
-   	
-   	   
-   	
-   	
-   	
-   	
-   	
+	
    	
    	function sendPidHavingClinicalData2S3DB(allDiseases,lookUpTree){
    	    
@@ -322,7 +319,7 @@ function startProcess(lookUpTree){
                                                     
                                                    (function(idx){
                                                              
-                                                            window.setTimeout(function(){sendPIDWithClnicalInfo(cuurentTbl,idx,currentColIdx,patient_collection_id);},7000);
+                                                            window.setTimeout(function(){sendPIDWithClnicalInfo(cuurentTbl,idx,currentColIdx,clinical_pid_colletionID);},7000);
                                                                
                                                          }     
                                                    (idx));   
@@ -346,7 +343,7 @@ function startProcess(lookUpTree){
    	}
    	
    	
-   	function sendPIDWithClnicalInfo(cuurentTbl,idx,currentColIdx,patient_collection_id){
+   	function sendPIDWithClnicalInfo(cuurentTbl,idx,currentColIdx,clinical_pid_colletionID){
    	     s3dbc.setDeployment(deployment);
    	     s3dbc.login(username, password, function (err, key) {
                                                             if (err !== null) {
@@ -357,7 +354,7 @@ function startProcess(lookUpTree){
                                                                 s3dbc.setKey(key);
                                                                 s3dbc.setJSONP(false);
                                                                // console.log (cuurentTbl[idx][currentColIdx]);
-                                                                s3dbc.insertItem(patient_collection_id,cuurentTbl[idx][currentColIdx], function(err, results){});
+                                                                s3dbc.insertItem(clinical_pid_colletionID,cuurentTbl[idx][currentColIdx], function(err, results){});
                                                               
                                                             }
                                                           });      
