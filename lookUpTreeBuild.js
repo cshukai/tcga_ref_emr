@@ -1,6 +1,10 @@
 ////////////////////////////////////////////////// global variables////////////////////////////////////////
 var sparql_end_point='http://agalpha.mathbiol.org/repositories/tcga_ref_emr';
-var s3db_url='http://sbalpha.infopath.hs.uab.edu/s3db';
+
+var deployment='http://sbalpha.infopath.hs.uab.edu/s3db';
+var username ='shukai';
+var password='12345';
+
 var lookUpTree={};
 lookUpTree['disease']=new Array();
 var aDisease={};
@@ -35,7 +39,94 @@ var insertSparqully=function(sub,pred,obj,sparql_end_point){
   };
 
 
-
+ var sendPidClinicalData2Alle =function(allDiseases,lookUpTree){
+        
+        
+         var q = async.queue(function (task, callback) {
+             if(task.value!=undefined){
+                 insertSparqully(task.pid,task.attr,task.value,sparql_end_point);    
+             }
+             
+              window.setTimeout(function(){ callback();},200);   
+             }, 1);
+        
+        
+             q.drain = function() {
+                console.log('all items have been processed');
+             }
+        
+        
+        
+        
+        for(var i=0; i<allDiseases.length;i++){
+             (function(i){
+                 var totLen=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'].length;                   
+                 var start=totLen/2;
+                 for(var k=start;k<totLen;k++){
+                     (function(k){
+                        var subDataTypes=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][k];
+                        if(subDataTypes.indexOf("bcr_sample_barcode")> -1){
+                            
+                            var urlIndex=k-totLen/2;
+                            var currentURL=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][urlIndex];
+                            
+                            window.setTimeout(function(){
+                                
+                                
+                                                                   TCGA.get(currentURL,function(error,data){
+                                        //console.log(error);
+                                                
+                                         var cuurentTbl=splitTbl2Array(data,false);
+                                         var currentColNames=cuurentTbl[0];
+                                       //  console.log(currentColNames);
+                                       
+                                   
+                                       
+                                         var currentColIdx=currentColNames.indexOf("bcr_sample_barcode");
+                                           //  console.log(currentColIdx);
+                                              if(currentColIdx>-1){
+                                                  
+                                
+                                                     for(var index=1;index<cuurentTbl.length;index++){
+                                                         
+                                                        (function(index){
+                                                           for(idx=0;idx<currentColNames.length;idx++){
+                                                               (function(idx){
+                                                                  if(idx!=currentColIdx){
+                                                       
+                                                                        q.push({pid:cuurentTbl[index][currentColIdx],attr:currentColNames[idx],value:cuurentTbl[index][idx]});
+                                                         
+                                                         
+                                                                   }          
+                                                               }(idx));
+                                                         
+                                                               
+                                                           }
+                                                       
+                                                             
+                                                         }(index));
+                                          
+                                                 }
+                            }
+                            
+                            
+                        });
+                                
+                                
+                                
+                            },5000);
+                 
+                       }
+                     }(k));
+                         
+                     
+                 }
+                 
+             }(i));
+        }
+       
+    };
+    
 ///////////////////////////////////////////// dependency///////////////////////////////////////////////////////
 var ScriptNode=document.createElement('script');
 ScriptNode.setAttribute('type','text/javascript');
@@ -183,94 +274,7 @@ function startProcess(lookUpTree){
  
    
    	
-   	    function sendPidClinicalData2Alle(allDiseases,lookUpTree){
-        
-        
-         var q = async.queue(function (task, callback) {
-             if(task.value!=undefined){
-                 insertSparqully(task.pid,task.attr,task.value,sparql_end_point);    
-             }
-             
-              window.setTimeout(function(){ callback();},200);   
-             }, 1);
-        
-        
-             q.drain = function() {
-                console.log('all items have been processed');
-             }
-        
-        
-        
-        
-        for(var i=0; i<allDiseases.length;i++){
-             (function(i){
-                 var totLen=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'].length;                   
-                 var start=totLen/2;
-                 for(var k=start;k<totLen;k++){
-                     (function(k){
-                        var subDataTypes=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][k];
-                        if(subDataTypes.indexOf("bcr_sample_barcode")> -1){
-                            
-                            var urlIndex=k-totLen/2;
-                            var currentURL=lookUpTree[allDiseases[i]]['clin']['url_colNames_map'][urlIndex];
-                            
-                            window.setTimeout(function(){
-                                
-                                
-                                                                   TCGA.get(currentURL,function(error,data){
-                                        //console.log(error);
-                                                
-                                         var cuurentTbl=splitTbl2Array(data,false);
-                                         var currentColNames=cuurentTbl[0];
-                                       //  console.log(currentColNames);
-                                       
-                                   
-                                       
-                                         var currentColIdx=currentColNames.indexOf("bcr_sample_barcode");
-                                           //  console.log(currentColIdx);
-                                              if(currentColIdx>-1){
-                                                  
-                                
-                                                     for(var index=1;index<cuurentTbl.length;index++){
-                                                         
-                                                        (function(index){
-                                                           for(idx=0;idx<currentColNames.length;idx++){
-                                                               (function(idx){
-                                                                  if(idx!=currentColIdx){
-                                                       
-                                                                        q.push({pid:cuurentTbl[index][currentColIdx],attr:currentColNames[idx],value:cuurentTbl[index][idx]});
-                                                         
-                                                         
-                                                                   }          
-                                                               }(idx));
-                                                         
-                                                               
-                                                           }
-                                                       
-                                                             
-                                                         }(index));
-                                          
-                                                 }
-                            }
-                            
-                            
-                        });
-                                
-                                
-                                
-                            },5000);
-                 
-                       }
-                     }(k));
-                         
-                     
-                 }
-                 
-             }(i));
-        }
-       
-    }
-   	
+   	   
    	
    	
    	
