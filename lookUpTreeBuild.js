@@ -145,13 +145,13 @@ document.head.appendChild(ScriptNode);
 
 var ScriptNode=document.createElement('script');
 ScriptNode.setAttribute('type','text/javascript');
-ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/library/caolan-async-4351b56/lib/async.js');
+ScriptNode.setAttribute('src','https://raw.github.com/cshukai/tcga_ref_emr/master/async.js');
 document.head.appendChild(ScriptNode);
 
 
 var ScriptNode=document.createElement('script');
 ScriptNode.setAttribute('type','text/javascript');
-ScriptNode.setAttribute('src','https://dl.dropbox.com/u/79021836/library/caolan-async-4351b56/lib/async.js');
+ScriptNode.setAttribute('src','https://raw.github.com/cshukai/tcga_ref_emr/master/jquery.jsonp.js');
 document.head.appendChild(ScriptNode);
 
 //////////////////////////////////////////////////////pipeline//////////////////////////////
