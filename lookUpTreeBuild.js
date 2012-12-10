@@ -7,7 +7,7 @@ var sparql_end_point='http://agalpha.mathbiol.org/repositories/tcga_ref_emr';
 //using s3db as backend
 var deployment='http://204.232.200.16/uabs3db';
 var username ='shukai';
-var password='8860005';
+var password='500068';
 
 var project_ID='289';
 var clinical_pid_colletionID='97';
