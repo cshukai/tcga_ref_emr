@@ -10,7 +10,7 @@ var username ='shukai';
 var password='500068';
 
 var project_ID='289';
-var clinical_pid_colletionID='97';
+var clinical_pid_colletionID='290';
 
 
 // using  couchdb as backend
