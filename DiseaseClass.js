@@ -5,7 +5,7 @@
 
 
 function  queryResultObj2Array(qr,targetIdx){
-	//assuming query results ares at the targetIdx of every  array element in object
+	//assuming query results are at the targetIdx of every  array element in object
 	var output=new Array();
 	for(var i=0; i<qr.length;i++){
 		output[i]=qr[i][targetIdx].toString().replace(/\"/g,"");
@@ -95,9 +95,6 @@ function barcode2elements(barcode,dataType){
          
          return  barcodeElement;
     }
-
-
-
 
 
 
@@ -273,11 +270,6 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
                                                             }
                                                           
    }
- 
- 
- 
- 
- 
  
    Disease.prototype.getDataTypes=function(){
    	var that=this;

@@ -1,11 +1,19 @@
 ////////////////////////////////////////////////// global variables////////////////////////////////////////
+
+// using allegrograph as backend
 var sparql_end_point='http://agalpha.mathbiol.org/repositories/tcga_ref_emr';
 
-var deployment='http://sbalpha.infopath.hs.uab.edu/s3db';
+
+//using s3db as backend
+var deployment='http://204.232.200.16/uabs3db';
 var username ='shukai';
-var password='12345';
-var project_ID='96';
+var password='8860005';
+
+var project_ID='289';
 var clinical_pid_colletionID='97';
+
+
+// using  couchdb as backend
 
 
 var lookUpTree={};
@@ -395,5 +403,5 @@ function startProcess(lookUpTree){
    }
   
    
-    
+      
 }

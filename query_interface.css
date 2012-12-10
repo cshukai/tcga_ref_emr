@@ -1,0 +1,16 @@
+
+html, body{ height: 100%; width: 100%; padding: 0;}
+
+#pidArea {margin-left:auto;margin-right:auto;height:100%;}
+
+@-webkit-keyframes slidein {
+  from {
+      /* margin-top:50%; */
+        top : 400px;
+  }
+ 
+  to {
+      /* margin-top:10%; */
+        top: 50px;
+  }
+}
