@@ -107,38 +107,6 @@ var  Disease=function(diseaseName){
     
     
 
-//data transfer    
-Disease.prototype.send2Server=function(lookUpTree,serverURL){
-    var that=this;
-    that.dSet={};
-	that.dSet=lookUpTree[that.diseaseName];
-	var allKeyNames=Object.keys(that.dSet);
-    
-    var formContainer=document.createElement('form');
-    formContainer.setAttribute('id','d4sumbit');
-    formContainer.setAttribute('target','_blank');
-    formContainer.setAttribute('formaction',serverURL);
-    for(var index=0; index<allKeyNames.length; index++){
-    	 var unitContainer={};
-         unitContainer=document.createElement('input');
-         unitContainer.setAttribute('name',allKeyNames[index]);
-         unitContainer.setAttribute('type','hidden');
-         unitContainer.setAttribute('value',JSON.stringify(that.dSet[allKeyNames[index]]));
-         
-         formContainer.appendChild(unitContainer);
-    }
-    
-     var unitContainer={};
-     unitContainer=document.createElement('input');
-     unitContainer.setAttribute('name','diseaseName');
-     unitContainer.setAttribute('type','hidden');
-     unitContainer.setAttribute('value',that.diseaseName);
-	 formContainer.appendChild(unitContainer);
-	 formContainer.method='post';
-	 formContainer.submit();
-
-}    
-    
     
 // parsing for slide-image-related data    
 Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
