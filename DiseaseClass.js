@@ -17,7 +17,7 @@ function  queryResultObj2Array(qr,targetIdx){
 
 
 
-
+// doced
 function splitTbl2Array(tbl,hasColName){
    allText=tbl.split("\n");
    var colNum=(allText[0].split("\t")).length;
@@ -71,7 +71,7 @@ function splitTbl2Array(tbl,hasColName){
 
 
 
-
+//doced
 function barcode2elements(barcode,dataType){
 	     var barcodeElement={};
          
@@ -239,6 +239,8 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
                                                           
    }
  
+
+   //deprecated
    Disease.prototype.getDataTypes=function(){
    	var that=this;
    	var sparql_template= [ "prefix tcga:<http://purl.org/tcga/core#>",
@@ -261,8 +263,6 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
         var sparql_query=sparql_template.join(" ");                       // note :this refers to the windows
         TCGA.find(sparql_query,function(error,data){console.log(error);that.dataTypes= queryResultObj2Array(data,0);});
    
-        
-        
                  
          
        }
@@ -299,10 +299,6 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
                  
          
        }
-  
-
-
-
   
   
  Disease.prototype.fetchOneColInFile=function(lookUpTree,i,j,k,allDiseases,mainDataType,currentURL,resultColname,urlResultMapName){
@@ -350,7 +346,7 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
 
 
 
-
+// doced
 //assuming colnames are tab-separated
   Disease.prototype.fetchColNames=function(url){
   	   var that=this;
@@ -368,7 +364,7 @@ Disease.prototype.getPatientsInBcrImages=function(lookUpTree){
   
   
 
-
+//doced
 //static functions for building look-up  tree
   function getAllDiseaseTypes(){
   	  var that= this;

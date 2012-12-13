@@ -157,10 +157,6 @@ ScriptNode.setAttribute('src','https://raw.github.com/cshukai/tcga_ref_emr/maste
 document.head.appendChild(ScriptNode);
 
 
-var ScriptNode=document.createElement('script');
-ScriptNode.setAttribute('type','text/javascript');
-ScriptNode.setAttribute('src','https://raw.github.com/cshukai/tcga_ref_emr/master/jquery.jsonp.js');
-document.head.appendChild(ScriptNode);
 
 //////////////////////////////////////////////////////pipeline//////////////////////////////
 
@@ -173,10 +169,9 @@ window.setTimeout(function(){startProcess(lookUpTree);},5000); // initilization
 function startProcess(lookUpTree){
     
      
-   // s3dbc.setJSONP(false);
     var currentWin=this;
     getAllDiseaseTypes();
-    window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDiseaseTypes);},30000);
+    window.setTimeout(function(){processingDiseaseType(lookUpTree,currentWin.allDiseaseTypes);},3000);
  
      
     function processingDiseaseType(lookUpTree,allDiseaseTypes){ // place all the disease types in lookUpTree
@@ -189,7 +184,7 @@ function startProcess(lookUpTree){
  	  lookUpTree[allDiseaseTypes[j]]['dataType']=new Array();
    	  
  	 }    
- 	  feedDataType2BackEndTree(lookUpTree,allDiseaseTypes);
+ 	 feedDataType2BackEndTree(lookUpTree,allDiseaseTypes);
    }
  	 	 	 	
  
@@ -199,7 +194,7 @@ function startProcess(lookUpTree){
       
   	 for(var k=0; k<allDiseaseTypes.length; k++){
         
-  	   if(k==25){
+  	   if(k==allDiseaseTypes.length){
   	   	  break;
   	   }
   	   
@@ -290,8 +285,9 @@ function startProcess(lookUpTree){
     }
  
    
+
 	
-   	
+   	 // crash happening here   
    	function sendPidHavingClinicalData2S3DB(allDiseases,lookUpTree){
    	    
    	    for(var i=0; i<allDiseases.length;i++){
@@ -318,15 +314,15 @@ function startProcess(lookUpTree){
                                            //  console.log(currentColIdx);
                                               if(currentColIdx>-1){
                                                   
-                                                for(var index=0;index<currentColNames.length;index++){
-                                                    (function(index){
-                                                        if(index!=currentColIdx){
-                                                           window.setTimeout(function(){builS3DBdRules(currentColNames[index]);},15000);    
-                                                        }
+                                                // for(var index=0;index<currentColNames.length;index++){
+                                                //     (function(index){
+                                                //         if(index!=currentColIdx){
+                                                //            window.setTimeout(function(){builS3DBdRules(currentColNames[index]);},15000);    
+                                                //         }
                                                              
-                                                    }(index))
+                                                //     }(index))
                                                    
-                                                }  
+                                                // }  
                                                   
                                                   
                                                 for(var idx=1; idx<cuurentTbl.length; idx++){
@@ -379,29 +375,33 @@ function startProcess(lookUpTree){
    	
    
    	
-   function  builS3DBdRules(ruleObject){
+   // function  builS3DBdRules(ruleObject){
        
-       s3dbc.login(username, password, function (err, key) {
-                                                            if (err !== null) {
-                                                               console.log("Login failed.", err);
-                                                            } 
+   //     s3dbc.login(username, password, function (err, key) {
+   //                                                          if (err !== null) {
+   //                                                             console.log("Login failed.", err);
+   //                                                          } 
                                                                     
-                                                            else {
-                                                                s3dbc.setKey(key);
-                                                                //s3dbc.setJSONP(false);
-                                                                s3dbc.setDeployment(deployment);
-                                                                var prefix='<S3QL><insert>rule</insert><where>';                                                            
-                                                                var suffix='</where></S3QL>';
-                                                                var s3ql_buildRules=prefix+'<project_id>'+project_ID+'</project_id>'+'<subject_id>'+subject_ID+'</subject_id>'+'<verb>has</verb>'+'<object>'+ruleObject+'</object>'+suffix;
-                                                               // console.log(s3ql_buildRules);
-                                                                s3dbc.s3qlQuery(s3ql_buildRules , function(err,  results){
-                                                                      //console.log(err);
-                                                                } );
+   //                                                          else {
+   //                                                              s3dbc.setKey(key);
+   //                                                              //s3dbc.setJSONP(false);
+   //                                                              s3dbc.setDeployment(deployment);
+   //                                                              var prefix='<S3QL><insert>rule</insert><where>';                                                            
+   //                                                              var suffix='</where></S3QL>';
+   //                                                              var s3ql_buildRules=prefix+'<project_id>'+project_ID+'</project_id>'+'<subject_id>'+subject_ID+'</subject_id>'+'<verb>has</verb>'+'<object>'+ruleObject+'</object>'+suffix;
+   //                                                             // console.log(s3ql_buildRules);
+   //                                                              s3dbc.s3qlQuery(s3ql_buildRules , function(err,  results){
+   //                                                                    //console.log(err);
+   //                                                              } );
                                                               
-                                                            }
-                                                          });     
-   }
+   //                                                          }
+   //                                                        });     
+   // }
   
    
       
+
+
+
+
 }
